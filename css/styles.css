@@ -174,11 +174,11 @@ textarea:focus-visible {
 
 /* ---------- Header ---------- */
 .site-header {
-  background: var(--color-primary-dark);
+  background: var(--color-surface);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 12px rgba(124, 46, 82, 0.1);
 }
 
 .header-inner {
@@ -204,7 +204,7 @@ textarea:focus-visible {
 .brand-name {
   font-family: var(--font-display);
   font-weight: 700;
-  color: #fff;
+  color: var(--color-ink);
   font-size: 1.1rem;
 }
 
@@ -215,21 +215,25 @@ textarea:focus-visible {
 }
 
 .primary-nav a {
-  color: #f6e3ec;
+  color: var(--color-ink-soft);
   text-decoration: none;
   font-weight: 500;
 }
 
 .primary-nav a:hover {
-  color: #fff;
+  color: var(--color-primary);
 }
 
 .nav-cta {
-  background: var(--color-primary-light);
-  color: var(--color-ink) !important;
+  background: var(--color-primary);
+  color: #fff !important;
   padding: 8px 18px;
   border-radius: 999px;
   font-weight: 600 !important;
+}
+
+.nav-cta:hover {
+  color: #fff !important;
 }
 
 .nav-toggle {
@@ -247,7 +251,7 @@ textarea:focus-visible {
 
 .nav-toggle-bar {
   height: 2px;
-  background: #fff;
+  background: var(--color-ink);
   border-radius: 2px;
 }
 
@@ -535,13 +539,14 @@ textarea:focus-visible {
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--color-primary-dark);
+    background: var(--color-surface);
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.25s ease;
+    box-shadow: 0 12px 20px rgba(124, 46, 82, 0.12);
   }
 
   .primary-nav.is-open {
@@ -551,7 +556,7 @@ textarea:focus-visible {
   .primary-nav a {
     width: 100%;
     padding: 14px 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--color-border);
   }
 
   .nav-cta {
