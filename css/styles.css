@@ -1,15 +1,20 @@
 /* ===========================================================
    MIA Bookkeeping and Co. — stylesheet
-   Palette is CONFIRMED — pulled from the client's approved
-   homepage mockup ("Website Home_Sample_Preferred.png").
-   Named per the mockup's own color-palette annotations.
+   Base palette (navy/slate) is CONFIRMED — pulled from the client's
+   approved homepage mockup ("Website Home_Sample_Preferred.png").
+   The mockup's Muted Mauve/Dusty Plum accents were swapped for a
+   neutral steel-blue-gray at the client's request, to read more
+   professional/gender-neutral — see HANDOFF.md. Note: the actual
+   logo artwork (assets/img/logo-mark*.png) still has its original
+   mauve gradient baked into the pixels, since that's the client's
+   real submitted logo file, not something this stylesheet controls.
    =========================================================== */
 
 :root {
   --color-primary: #344955;       /* Deep Slate — CTAs / buttons */
   --color-primary-dark: #25313b;  /* Charcoal Navy — headings, card titles */
-  --color-primary-light: #8c6278; /* Dusty Plum — secondary accent / hover */
-  --color-accent: #a84f7a;        /* Muted Mauve — logo accent, small text accents, links */
+  --color-primary-light: #6e8a9b; /* lighter steel-blue — secondary accent / hover */
+  --color-accent: #4a6b80;        /* muted steel-blue — eyebrows, links, small accents */
   --color-bg: #faf9f7;            /* Off White — page background */
   --color-bg-alt: #f1f3f4;        /* Cool Gray — section background */
   --color-surface: #ffffff;
@@ -236,6 +241,12 @@ textarea:focus-visible {
   color: var(--color-accent);
 }
 
+.primary-nav a[aria-current="page"] {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .nav-cta {
   background: var(--color-primary);
   color: #fff !important;
@@ -341,6 +352,20 @@ textarea:focus-visible {
 }
 
 .service-card-link:hover {
+  text-decoration: underline;
+}
+
+.services-view-all {
+  text-align: center;
+  margin: 32px 0 0;
+}
+
+.services-view-all a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.services-view-all a:hover {
   text-decoration: underline;
 }
 
@@ -483,7 +508,7 @@ textarea:focus-visible {
   height: 72px;
   font-size: 0.62rem;
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(216, 79, 122, 0.5);
+  border-color: rgba(110, 138, 155, 0.5);
   color: #d8dadd;
 }
 
@@ -723,6 +748,30 @@ textarea:focus-visible {
   display: none !important;
 }
 
+/* ---------- Closing CTA band ---------- */
+.closing-cta {
+  padding: 64px 0;
+  background: var(--color-primary-dark);
+}
+
+.closing-cta-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.closing-cta .section-title {
+  color: #fff;
+}
+
+.closing-cta .section-subtitle {
+  color: #c7ccd1;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 28px;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   background: var(--color-ink);
@@ -818,20 +867,22 @@ textarea:focus-visible {
   margin: 16px 0 0;
 }
 
-/* ---------- Service detail pages ---------- */
-.service-hero {
+/* ---------- Page intro band (services, about, contact) ---------- */
+.page-hero {
   background: linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 70%);
   padding: 56px 0 40px;
 }
 
-.service-hero h1,
-.service-hero .hero-copy {
+.page-hero h1,
+.page-hero .hero-copy {
   max-width: 760px;
 }
 
-.service-hero h1 {
+.page-hero h1 {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
 }
+
+/* ---------- Service detail pages ---------- */
 
 .service-detail {
   padding: 56px 0 72px;

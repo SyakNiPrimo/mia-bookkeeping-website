@@ -11,15 +11,23 @@ anything Vercel-related — there are some non-obvious gotchas below.
 - Git repo, branch `master`, remote: `https://github.com/SyakNiPrimo/mia-bookkeeping-website` (public)
 
 **Uncommitted changes as of this handoff** — commit these first:
-- `index.html`, `css/styles.css`, `js/script.js`, `api/contact.js`, `coming-soon.html` — rebuilt
-  twice against the brief as it evolved (`mia-bookkeeping-website-brief.md`, now on its 3rd
-  revision): multi-page services, two-step contact form, "How We Work Remotely" and "Industries
-  Served" sections, then a full brand pass once the client dropped real assets (confirmed color
-  palette, final logo files, real headshot, footer sitemap + badges). See "Client content — status"
-  below for the full rundown — it's long, read it before touching brand/copy again.
-- `services/` is new — one detail page per service (`full-cycle-bookkeeping.html`, `payroll.html`,
-  `quickbooks-cleanup-catch-up.html`, `quickbooks-setup-consultation.html`), linked from the
-  homepage's service cards.
+- **The site is now fully multi-page**, not just services: `index.html` (Home), `services.html`,
+  `about.html`, `contact.html` are all separate top-level pages, each with the same header/nav/
+  footer. This was a deliberate correction — an earlier round had About/Contact/Testimonials/
+  Industries all living as anchor-scrolled sections on the homepage, which wasn't what was wanted.
+  `index.html` is now a trimmed landing page (hero, services preview, testimonials, closing CTA);
+  the About content (bio, differentiators, headshot, Industries Served) moved to `about.html`; the
+  contact form moved to `contact.html`; a new `services.html` hub page holds the full services
+  grid + "How We Work Remotely" (previously only reachable by scrolling the homepage).
+- **Color scheme changed**: the mockup-confirmed Muted Mauve/Dusty Plum accents were swapped for a
+  neutral steel-blue-gray at the client's request (read as too feminine/pink) — see "Brand" below.
+- `css/styles.css`, `js/script.js`, `api/contact.js`, `coming-soon.html` — also touched this round
+  (color tokens, a real bug fix in the contact form — see "Known platform quirks"). Full history of
+  everything from the brief's evolution is in "Client content — status" below — it's long, read it
+  before touching brand/copy again.
+- `services/` — one detail page per service (`full-cycle-bookkeeping.html`, `payroll.html`,
+  `quickbooks-cleanup-catch-up.html`, `quickbooks-setup-consultation.html`), linked from both the
+  homepage's services preview and the new `services.html` hub.
 - `assets/img/logo-mark.png`, `logo-monogram.png`, `logo-mark-dark.png`, `headshot.jpg` — all
   regenerated from the client's real asset drop (see "Brand" below for exactly which source file
   each came from and how).
@@ -39,7 +47,10 @@ resize (now superseded by the assets above) and the very first round of question
 ## File structure
 
 ```
-index.html            homepage (hero, services cards, remote-work, about, testimonials, 2-step contact form)
+index.html            Home — hero, services preview, testimonials, closing CTA
+services.html          Services hub — full services grid + "How We Work Remotely"
+about.html             About — bio, headshot, differentiators, Industries Served
+contact.html           Contact — contact details + two-step lead form
 services/              one detail page per service, long-form copy, linked from the service cards
   full-cycle-bookkeeping.html
   payroll.html
@@ -66,23 +77,30 @@ images (now in the footer) and vector/larger logo files if ever needed at bigger
 
 ## Brand
 
-**Color palette — CONFIRMED**, pulled from the client's preferred homepage mockup
-(`Website Home_Sample_Preferred.png`, inside the zip) and applied to `css/styles.css`'s `:root`
-tokens:
+**Color palette**: base navy/slate is still what the client's preferred homepage mockup confirmed
+(`Website Home_Sample_Preferred.png`, inside the zip), but the mockup's Muted Mauve/Dusty Plum
+accents were swapped out at the client's explicit request — read as too feminine/pink, wanted
+something more professional and gender-neutral. Current tokens in `css/styles.css`'s `:root`:
 
 | Token | Hex | Role |
 |---|---|---|
-| `--color-primary` | `#344955` (Deep Slate) | CTAs / buttons |
-| `--color-primary-dark` | `#25313b` (Charcoal Navy) | headings, card titles |
-| `--color-primary-light` | `#8c6278` (Dusty Plum) | secondary accent / hover |
-| `--color-accent` | `#a84f7a` (Muted Mauve) | logo accent, eyebrows, links, small accents |
-| `--color-bg` | `#faf9f7` (Off White) | page background |
-| `--color-bg-alt` | `#f1f3f4` (Cool Gray) | section background |
-| `--color-ink` | `#25313b` | primary heading text |
-| `--color-ink-soft` | `#33383d` (Charcoal) | body text |
-| `--color-border` | `#d8dadd` (Stone Gray) | borders / lines |
+| `--color-primary` | `#344955` (Deep Slate) | CTAs / buttons — from mockup, unchanged |
+| `--color-primary-dark` | `#25313b` (Charcoal Navy) | headings, card titles — from mockup, unchanged |
+| `--color-primary-light` | `#6e8a9b` (lighter steel-blue) | secondary accent / hover — **replaces Dusty Plum `#8c6278`** |
+| `--color-accent` | `#4a6b80` (muted steel-blue) | eyebrows, links, small accents — **replaces Muted Mauve `#a84f7a`** |
+| `--color-bg` | `#faf9f7` (Off White) | page background — from mockup, unchanged |
+| `--color-bg-alt` | `#f1f3f4` (Cool Gray) | section background — from mockup, unchanged |
+| `--color-ink` | `#25313b` | primary heading text — unchanged |
+| `--color-ink-soft` | `#33383d` (Charcoal) | body text — unchanged |
+| `--color-border` | `#d8dadd` (Stone Gray) | borders / lines — unchanged |
 
-This supersedes the earlier `#a8436e` sampled-from-logo placeholder color entirely.
+**Important caveat**: the actual "MIA" logo artwork (`assets/img/logo-mark.png`,
+`logo-mark-dark.png`, `logo-monogram.png`) still has the original mauve/pink gradient baked into
+the image pixels — that's the client's real submitted logo file, a raster image, not something
+this stylesheet can recolor. Only the site's supporting UI (buttons, links, badges, checkmarks)
+went neutral; the logo mark itself is still visibly pink in the header/footer. If the client wants
+the logo itself recolored too, that needs a new logo file from her — don't silently fabricate a
+recolored version of her actual brand mark.
 
 **Logo — CONFIRMED, final files**, both delivered as flat JPEGs with a baked-in background color
 (no alpha channel), so each was chroma-keyed and cropped down into a transparent PNG before use —
@@ -267,6 +285,30 @@ Still outstanding / not pulled in:
 - Vector/transparent-background versions of the logo, if it ever needs to scale larger than what's
   usable from the current JPEG sources.
 - The domain situation — see "Domain" above, this is the big one.
+
+### Round 4 — full multi-page split + neutral color scheme
+
+Two corrections from direct user feedback, not from the brief:
+
+1. **"I thought we were doing separate pages for each — services, about, contact"**: an earlier
+   round only split out Services into detail pages; About/Industries/Testimonials/Contact were all
+   still anchor-scrolled sections on `index.html`. Rebuilt as a real multi-page site — see "File
+   structure" above for the new page list. `index.html` is now a shorter landing page; the removed
+   sections moved into `about.html`/`contact.html`, and a new `services.html` hub page was added
+   (previously "Services" in the nav just scrolled the homepage — now it's its own page, matching
+   how About/Contact now behave). The `.service-hero` CSS class was renamed to `.page-hero` since
+   it's now the shared intro-band style for all four top-level pages, not just service detail pages.
+   Every page shares the same header/nav/footer; nav marks the current page via
+   `aria-current="page"` (small underline, see `.primary-nav a[aria-current="page"]` in CSS).
+
+2. **"Change the color scheme to something more professional and gender-neutral"** — see "Brand"
+   above for the exact token swap (mauve/plum → steel-blue-gray). Note the actual logo image files
+   still have the original mauve baked in — flagged clearly, not silently changed, since that would
+   mean fabricating a different logo than the one the client actually submitted.
+
+Both changes were verified with real Playwright screenshots (desktop + mobile, all four top-level
+pages) and a scripted interaction test of the two-step form on its new `contact.html` location —
+not just static review.
 
 ## Known platform quirks (don't re-debug these, just work around them)
 
