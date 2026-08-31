@@ -14,21 +14,35 @@ module.exports = async function handler(req, res) {
   }
 
   const toEmail = process.env.CONTACT_FORM_TO_EMAIL;
-  const { name, email, phone, service, message } = req.body || {};
+  const {
+    businessName,
+    firstName,
+    lastName,
+    email,
+    phone,
+    website,
+    address,
+    servicesNeeded,
+    otherSpecify,
+  } = req.body || {};
 
-  if (!name || !email || !message) {
-    res.status(400).json({ error: 'Name, email, and message are required.' });
+  if (!email || !(firstName || lastName)) {
+    res.status(400).json({ error: 'Email and at least one of first/last name are required.' });
     return;
   }
 
   // PLACEHOLDER: send `payload` to `toEmail` via an email provider here.
   console.log('Contact form submission (not emailed — backend not wired up):', {
     toEmail,
-    name,
+    businessName,
+    firstName,
+    lastName,
     email,
     phone,
-    service,
-    message,
+    website,
+    address,
+    servicesNeeded,
+    otherSpecify,
   });
 
   res.status(501).json({ error: 'Email delivery is not configured yet.' });

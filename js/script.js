@@ -2,101 +2,170 @@
 const navToggle = document.getElementById('navToggle');
 const primaryNav = document.getElementById('primaryNav');
 
-navToggle.addEventListener('click', () => {
-  const isOpen = primaryNav.classList.toggle('is-open');
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-});
-
-primaryNav.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => {
-    primaryNav.classList.remove('is-open');
-    navToggle.setAttribute('aria-expanded', 'false');
+if (navToggle && primaryNav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = primaryNav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
   });
-});
 
-// Contact form validation + submit handling
-const form = document.getElementById('contactForm');
-const submitBtn = document.getElementById('submitBtn');
-const formStatus = document.getElementById('formStatus');
-
-const fields = {
-  name: { input: document.getElementById('name'), error: document.getElementById('nameError') },
-  email: { input: document.getElementById('email'), error: document.getElementById('emailError') },
-  message: { input: document.getElementById('message'), error: document.getElementById('messageError') },
-};
-
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function validateField(key) {
-  const { input, error } = fields[key];
-  let message = '';
-
-  if (!input.value.trim()) {
-    message = 'This field is required.';
-  } else if (key === 'email' && !emailPattern.test(input.value.trim())) {
-    message = 'Please enter a valid email address.';
-  }
-
-  error.textContent = message;
-  input.setAttribute('aria-invalid', message ? 'true' : 'false');
-  input.closest('.form-row').classList.toggle('has-error', Boolean(message));
-  return !message;
+  primaryNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      primaryNav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
 }
 
-Object.keys(fields).forEach((key) => {
-  fields[key].input.addEventListener('blur', () => validateField(key));
-});
+// Contact form: two-step validation + submit handling
+// (guarded — service detail pages share this script but have no contact form)
+const form = document.getElementById('contactForm');
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
+if (form) {
+  const submitBtn = document.getElementById('submitBtn');
+  const formStatus = document.getElementById('formStatus');
 
-  const validations = Object.keys(fields).map(validateField);
-  const isValid = validations.every(Boolean);
+  const formStep1 = document.getElementById('formStep1');
+  const formStep2 = document.getElementById('formStep2');
+  const stepIndicator1 = document.getElementById('stepIndicator1');
+  const stepIndicator2 = document.getElementById('stepIndicator2');
+  const step1NextBtn = document.getElementById('step1NextBtn');
+  const step2BackBtn = document.getElementById('step2BackBtn');
 
-  formStatus.textContent = '';
-  formStatus.className = 'form-status';
+  const emailInput = document.getElementById('email');
+  const firstNameInput = document.getElementById('firstName');
+  const lastNameInput = document.getElementById('lastName');
+  const emailError = document.getElementById('emailError');
+  const step1Error = document.getElementById('step1Error');
 
-  if (!isValid) {
-    formStatus.textContent = 'Please fix the highlighted fields and try again.';
-    formStatus.classList.add('error');
-    return;
-  }
+  const servicesOther = document.getElementById('servicesOther');
+  const otherSpecifyRow = document.getElementById('otherSpecifyRow');
 
-  const payload = {
-    name: fields.name.input.value.trim(),
-    email: fields.email.input.value.trim(),
-    phone: document.getElementById('phone').value.trim(),
-    service: document.getElementById('service').value,
-    message: fields.message.input.value.trim(),
-  };
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Sending...';
+  function validateStep1() {
+    let valid = true;
 
-  try {
-    // Draft-stage endpoint: intended to hand off to a server function that
-    // emails CONTACT_FORM_TO_EMAIL (see api/contact.js). Not wired up yet,
-    // so this will fail until a backend is deployed — that's expected for
-    // this pass and demonstrates the error state below.
-    const response = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error('Request failed');
+    if (!emailInput.value.trim() || !emailPattern.test(emailInput.value.trim())) {
+      emailError.textContent = 'Please enter a valid email address.';
+      emailInput.setAttribute('aria-invalid', 'true');
+      valid = false;
+    } else {
+      emailError.textContent = '';
+      emailInput.setAttribute('aria-invalid', 'false');
     }
 
-    formStatus.textContent = "Thanks for reaching out — we'll be in touch soon.";
-    formStatus.classList.add('success');
-    form.reset();
-  } catch (err) {
-    formStatus.textContent =
-      "Something went wrong sending your message. Please email us directly instead.";
-    formStatus.classList.add('error');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Send Message';
+    if (!firstNameInput.value.trim() && !lastNameInput.value.trim()) {
+      step1Error.textContent = 'Please enter your first or last name.';
+      valid = false;
+    } else {
+      step1Error.textContent = '';
+    }
+
+    return valid;
   }
-});
+
+  [emailInput, firstNameInput, lastNameInput].forEach((input) => {
+    input.addEventListener('blur', validateStep1);
+  });
+
+  function isStep2Active() {
+    return formStep2.classList.contains('is-active');
+  }
+
+  function goToStep2() {
+    if (!validateStep1()) return;
+    formStep1.classList.remove('is-active');
+    formStep2.classList.add('is-active');
+    stepIndicator1.classList.remove('is-active');
+    stepIndicator2.classList.add('is-active');
+  }
+
+  function goToStep1() {
+    formStep2.classList.remove('is-active');
+    formStep1.classList.add('is-active');
+    stepIndicator2.classList.remove('is-active');
+    stepIndicator1.classList.add('is-active');
+  }
+
+  step1NextBtn.addEventListener('click', goToStep2);
+  step2BackBtn.addEventListener('click', goToStep1);
+
+  if (servicesOther && otherSpecifyRow) {
+    servicesOther.addEventListener('change', () => {
+      otherSpecifyRow.classList.toggle('is-hidden', !servicesOther.checked);
+    });
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // A stray Enter keypress on step 1 submits the form natively — treat that
+    // as "go to next step" instead, since the real submit button lives on step 2.
+    if (!isStep2Active()) {
+      goToStep2();
+      return;
+    }
+
+    if (!validateStep1()) {
+      goToStep1();
+      return;
+    }
+
+    formStatus.textContent = '';
+    formStatus.className = 'form-status';
+
+    const servicesNeeded = Array.from(
+      form.querySelectorAll('input[name="servicesNeeded"]:checked')
+    ).map((el) => el.value);
+
+    const payload = {
+      businessName: document.getElementById('businessName').value.trim(),
+      firstName: firstNameInput.value.trim(),
+      lastName: lastNameInput.value.trim(),
+      email: emailInput.value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      website: document.getElementById('website').value.trim(),
+      address: {
+        street: document.getElementById('addressStreet').value.trim(),
+        city: document.getElementById('addressCity').value.trim(),
+        state: document.getElementById('addressState').value.trim(),
+        zip: document.getElementById('addressZip').value.trim(),
+        country: document.getElementById('addressCountry').value.trim(),
+      },
+      servicesNeeded,
+      otherSpecify: document.getElementById('otherSpecify').value.trim(),
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    try {
+      // Draft-stage endpoint: intended to hand off to a server function that
+      // emails CONTACT_FORM_TO_EMAIL (see api/contact.js). Not wired up yet,
+      // so this will fail until a backend is deployed — that's expected for
+      // this pass and demonstrates the error state below.
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
+
+      formStatus.textContent = "Thanks for reaching out — we'll be in touch soon.";
+      formStatus.classList.add('success');
+      form.reset();
+      otherSpecifyRow.classList.add('is-hidden');
+      goToStep1();
+    } catch (err) {
+      formStatus.textContent =
+        "Something went wrong sending your message. Please email us directly instead.";
+      formStatus.classList.add('error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+    }
+  });
+}
