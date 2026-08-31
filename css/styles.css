@@ -356,6 +356,13 @@ textarea:focus-visible {
   flex: 1 1 380px;
 }
 
+.about-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-top: -4px;
+}
+
 /* ---------- Testimonials ---------- */
 .testimonials {
   padding: 72px 0;
