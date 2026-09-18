@@ -373,6 +373,45 @@ Still outstanding: `api/contact.js` is still the same unwired 501 stub — quiz
 submissions log to console same as contact form submissions always have, no real
 email sends yet (see "Lead capture" in README.md).
 
+### Round 6 — real certification badges, moved from footer to a homepage trust band
+
+Mitzi's actual Intuit/QuickBooks ProAdvisor certification badge images were provided
+directly (three: **QuickBooks Certified ProAdvisor Online**, **QuickBooks ProAdvisor
+— Level 1**, **QuickBooks Payroll ProAdvisor**) — these are real, confirmed
+credentials with real official artwork, not the generic mockup-referenced badge
+*types* that were still unconfirmed as of Round 4/5 (see "Client content — status"
+above). This resolves the last item on that round's "still outstanding" list.
+
+- Saved to `assets/img/badges/`. One file (`quickbooks-proadvisor-online.png`) had
+  a solid black background baked in (no alpha channel — `P` mode, not `RGBA`) rather
+  than a transparent PNG. Fixed the same way this repo already handled a similar
+  problem with the logo files in Round 3 (see "Brand" above): flood-filled the
+  black background out (starting from the four image corners, so only pixels
+  actually connected to the background — not any dark pixels inside the badge
+  artwork itself — got cleared), then feathered the alpha edge slightly
+  (`ImageFilter.GaussianBlur`, radius ~1.2) so the cutout doesn't look jagged.
+  Verified by compositing the result over both navy and white test backgrounds
+  before using it. The other two files already had proper alpha transparency.
+- **Removed entirely** from the footer's `[PLACEHOLDER]` badge row (the dashed-box
+  `.badge-placeholder` treatment plus its TODO comment) — deleted from all 8 pages'
+  shared footer, plus the now-dead `.footer-badges`/`.badge-placeholder` CSS.
+- **Added as a new "trust band"** directly below the hero on `index.html` **only**
+  (confirmed with the user — the other pages have a shorter `.page-hero`, not the
+  same hero, so it wasn't a natural fit there). Modeled on sold3x.com's own
+  trust-band component (same site referenced for the quiz mechanic in Round 5) —
+  view-sourced its CSS directly: a dark full-bleed band with a horizontally
+  auto-scrolling row of logos, content duplicated 2x for a seamless loop
+  (`translateX(-50%)`), paused on hover. Reimplemented with MIA's own
+  `--color-primary-dark` background instead of sold3x's dark green, new `.trust-*`
+  class names (not reused from the quiz's `.quiz-*` set). Respects
+  `prefers-reduced-motion` (animation disabled) and the duplicated badge set is
+  `aria-hidden="true"` so screen readers only hear the 3 real badges once.
+- Verified with Playwright: badges actually load (`naturalWidth > 0` for all 6 DOM
+  images, not just present in markup), zero footer `.badge-placeholder`/
+  `.footer-badges` elements remain on any page, `about.html` correctly has no trust
+  band, desktop + mobile screenshots, zero console/request errors. Re-ran the full
+  Round 5 quiz regression suite afterward — no regressions.
+
 ## Known platform quirks (don't re-debug these, just work around them)
 
 - **This Vercel MCP integration cannot create Production deployments via API** for

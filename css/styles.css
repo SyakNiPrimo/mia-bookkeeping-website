@@ -313,6 +313,54 @@ textarea:focus-visible {
   font-size: 1.05rem;
 }
 
+/* ---------- Certification badges (trust band) ---------- */
+.trust-band {
+  background: var(--color-primary-dark);
+  padding: 28px 0;
+}
+
+.trust-marquee {
+  overflow: hidden;
+}
+
+.trust-track {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  width: max-content;
+  animation: trustScroll 18s linear infinite;
+}
+
+.trust-marquee:hover .trust-track {
+  animation-play-state: paused;
+}
+
+@keyframes trustScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.trust-badge {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.trust-badge img {
+  height: 88px;
+  width: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-track {
+    animation: none;
+  }
+}
+
 /* ---------- Services ---------- */
 .services {
   padding: 72px 0;
@@ -492,30 +540,6 @@ textarea:focus-visible {
 .about-differentiators span {
   color: #c7ccd1;
   font-size: 0.9rem;
-}
-
-.badge-placeholder {
-  width: 96px;
-  height: 96px;
-  border: 1px dashed #d9b45a;
-  background: #fffaf0;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 0.7rem;
-  color: #8a6100;
-  padding: 6px;
-}
-
-.footer-badges .badge-placeholder {
-  width: 72px;
-  height: 72px;
-  font-size: 0.62rem;
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(110, 138, 155, 0.5);
-  color: #d8dadd;
 }
 
 /* ---------- Industries Served ---------- */
@@ -1016,13 +1040,6 @@ textarea:focus-visible {
   color: #fff;
 }
 
-.footer-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 28px 0;
-}
-
 .footer-social {
   display: flex;
   gap: 16px;
@@ -1105,6 +1122,15 @@ textarea:focus-visible {
 }
 
 @media (max-width: 720px) {
+  .trust-badge img {
+    height: 64px;
+  }
+
+  .trust-track {
+    gap: 40px;
+    animation-duration: 14s;
+  }
+
   .nav-toggle {
     display: flex;
   }
@@ -1156,7 +1182,6 @@ textarea:focus-visible {
     grid-column: 1 / -1;
   }
 
-  .footer-badges,
   .footer-social {
     justify-content: center;
   }
