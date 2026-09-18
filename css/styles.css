@@ -1058,7 +1058,7 @@ textarea:focus-visible {
 /* ---------- Closing CTA band ---------- */
 .closing-cta {
   padding: 64px 0;
-  background: var(--color-primary-dark);
+  background: var(--color-accent);
 }
 
 .closing-cta-inner {
