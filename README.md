@@ -51,11 +51,19 @@ There are two separate, intentionally different-weight lead paths:
 
 Both submit to the same endpoint, `POST /api/contact`, tagged with a
 `formType` field (`"contact"` or `"quiz"`) so the backend can tell them apart.
-`api/contact.js` is currently a placeholder stub that logs the payload and
-returns a 501 — no email actually sends yet. To wire up real delivery:
 
-1. Deploy on a platform that supports serverless functions (Vercel,
-   Netlify, etc.) or replace `api/contact.js` with your backend of choice.
-2. Set the `CONTACT_FORM_TO_EMAIL` environment variable (see `.env.example`).
-3. Add an email-sending call (Resend, SendGrid, Nodemailer, etc.) inside
-   `api/contact.js`.
+`api/contact.js` emails every submission to `CONTACT_FORM_TO_EMAIL` over
+plain SMTP via [Nodemailer](https://nodemailer.com/) (see `package.json`).
+Required environment variables (see `.env.example` for a full template and
+Gmail/Office 365-specific setup notes):
+
+- `CONTACT_FORM_TO_EMAIL` — destination inbox (e.g. `mitzi@miabookkeeping.com`)
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` — the sending mail server
+- `SMTP_USER`, `SMTP_PASS` — the account that authenticates and sends (can be
+  the same address as `CONTACT_FORM_TO_EMAIL` or a different one; for Gmail
+  this must be an **App Password**, not the account's normal password)
+
+Set these as environment variables on whatever platform hosts the serverless
+function (Vercel project → Settings → Environment Variables). If any of
+`SMTP_HOST`/`SMTP_USER`/`SMTP_PASS`/`CONTACT_FORM_TO_EMAIL` are missing, the
+endpoint returns a 500 instead of silently failing.

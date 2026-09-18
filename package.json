@@ -1,0 +1,8 @@
+{
+  "name": "mia-bookkeeping-website",
+  "private": true,
+  "description": "Static site with a single serverless function (api/contact.js) that emails contact form and quiz submissions via SMTP.",
+  "dependencies": {
+    "nodemailer": "^10.0.10"
+  }
+}
