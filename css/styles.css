@@ -330,7 +330,7 @@ textarea:focus-visible {
   align-items: center;
   gap: 22px;
   width: max-content;
-  animation: trustScroll 16s linear infinite;
+  animation: marqueeScroll 16s linear infinite;
   will-change: transform;
 }
 
@@ -338,7 +338,7 @@ textarea:focus-visible {
   animation-play-state: paused;
 }
 
-@keyframes trustScroll {
+@keyframes marqueeScroll {
   from {
     transform: translateX(0);
   }
@@ -604,28 +604,123 @@ textarea:focus-visible {
 
 .testimonial-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   margin-top: 32px;
+  align-items: stretch;
 }
 
 .testimonial-card {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 288px;
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 28px 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.testimonial-card:has(.testimonial-quote.is-expanded) {
+  height: auto;
 }
 
 .testimonial-card p {
   color: var(--color-ink-soft);
   font-style: italic;
+  margin: 0 0 14px;
+}
+
+.testimonial-quote {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  overflow: hidden;
+}
+
+.testimonial-quote.is-expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
+}
+
+.testimonial-toggle {
+  align-self: flex-start;
+  margin: 0 0 14px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.testimonial-toggle:hover {
+  color: var(--color-primary-dark);
 }
 
 .testimonial-card footer {
+  margin-top: auto;
   font-family: var(--font-display);
   font-weight: 600;
   color: var(--color-primary-dark);
   font-size: 0.9rem;
+}
+
+/* ---------- Industries served (marquee) ---------- */
+.industries-band {
+  background: var(--color-ink);
+  padding: 40px 0 32px;
+}
+
+.industries-band-title {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.industries-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.industries-track {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  animation: marqueeScroll 45s linear infinite reverse;
+  will-change: transform;
+}
+
+.industries-marquee:hover .industries-track {
+  animation-play-state: paused;
+}
+
+.industry-pill {
+  flex: 0 0 auto;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .industries-track {
+    animation: none;
+  }
 }
 
 /* ---------- Contact ---------- */
@@ -1150,6 +1245,16 @@ textarea:focus-visible {
   .trust-track {
     gap: 16px;
     animation-duration: 13s;
+  }
+
+  .industry-pill {
+    padding: 8px 16px;
+    font-size: 0.82rem;
+  }
+
+  .industries-track {
+    gap: 10px;
+    animation-duration: 30s;
   }
 
   .nav-toggle {
