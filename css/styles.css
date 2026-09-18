@@ -687,6 +687,9 @@ textarea:focus-visible {
 }
 
 .industries-marquee {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
@@ -697,8 +700,16 @@ textarea:focus-visible {
   align-items: center;
   gap: 14px;
   width: max-content;
-  animation: marqueeScroll 45s linear infinite reverse;
+  animation: marqueeScroll 24s linear infinite;
   will-change: transform;
+}
+
+.industries-track-row1 {
+  animation-direction: reverse;
+}
+
+.industries-track-row2 {
+  animation-direction: normal;
 }
 
 .industries-marquee:hover .industries-track {
@@ -1254,7 +1265,7 @@ textarea:focus-visible {
 
   .industries-track {
     gap: 10px;
-    animation-duration: 30s;
+    animation-duration: 16s;
   }
 
   .nav-toggle {
