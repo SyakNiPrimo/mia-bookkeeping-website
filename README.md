@@ -34,12 +34,25 @@ logo artwork. If a different final lockup or palette is provided later,
 swap the images in `assets/img/` and update the `--color-*` tokens at the
 top of `css/styles.css`.
 
-## Contact form
+## Lead capture: contact form + "Get Started" quiz
 
-The form validates Name, Email, and Message client-side and shows
-success/error states. It posts to `/api/contact`, which is currently a
-placeholder stub (`api/contact.js`) that logs the payload and returns a
-501 — no email actually sends yet. To wire up real delivery:
+There are two separate, intentionally different-weight lead paths:
+
+- **Contact form** (`contact.html`, reached via the footer's "Contact" link) — a
+  low-key Name/Email/Message form for people who just want to send a direct
+  message. Validates client-side and shows success/error states.
+- **"Get Started" quiz** — a 5-step modal (progress bar, one question per
+  screen, big tappable option cards, Back navigation, final step collects
+  contact info) launched from every "Get Started" button sitewide (header nav,
+  hero, closing CTAs, service-detail CTAs). Its markup/JS/CSS live in
+  `js/script.js` (`data-quiz-*` attributes) and `css/styles.css`
+  (`.quiz-*` classes); the modal HTML itself is duplicated at the end of every
+  page's `<body>`, same pattern as the shared header/footer.
+
+Both submit to the same endpoint, `POST /api/contact`, tagged with a
+`formType` field (`"contact"` or `"quiz"`) so the backend can tell them apart.
+`api/contact.js` is currently a placeholder stub that logs the payload and
+returns a 501 — no email actually sends yet. To wire up real delivery:
 
 1. Deploy on a platform that supports serverless functions (Vercel,
    Netlify, etc.) or replace `api/contact.js` with your backend of choice.

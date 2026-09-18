@@ -50,15 +50,19 @@ resize (now superseded by the assets above) and the very first round of question
 index.html            Home — hero, services preview, testimonials, closing CTA
 services.html          Services hub — full services grid + "How We Work Remotely"
 about.html             About — bio, headshot, differentiators, Industries Served
-contact.html           Contact — contact details + two-step lead form
+contact.html           Contact — contact details + simple Name/Email/Message form
 services/              one detail page per service, long-form copy, linked from the service cards
   full-cycle-bookkeeping.html
   payroll.html
   quickbooks-cleanup-catch-up.html
   quickbooks-setup-consultation.html
 coming-soon.html       branded "launching soon" holding page (already pushed, live on Vercel — see below)
-css/styles.css         all styles + brand tokens (:root variables at top)
-js/script.js           mobile nav toggle + two-step contact form validation/submit handling
+css/styles.css         all styles + brand tokens (:root variables at top) + quiz modal styles (.quiz-*)
+js/script.js           mobile nav toggle + simple contact form handling + "Get Started" quiz controller
+
+  Every page's <body> also carries an identical copy of the "Get Started" quiz
+  modal markup (a <div data-quiz-overlay> block, right after the shared footer) —
+  same no-build-step duplication pattern as the header/footer. See Round 5 below.
 api/contact.js         placeholder serverless function stub (not wired to real email)
 .env.example            CONTACT_FORM_TO_EMAIL var
 assets/img/            logo-mark.png (light-bg mark), logo-mark-dark.png (dark-bg mark),
@@ -309,6 +313,65 @@ Two corrections from direct user feedback, not from the brief:
 Both changes were verified with real Playwright screenshots (desktop + mobile, all four top-level
 pages) and a scripted interaction test of the two-step form on its new `contact.html` location —
 not just static review.
+
+### Round 5 — lead-capture redesign: simple contact form + "Get Started" quiz modal
+
+Replaced the old heavier two-step contact form (business address, services-needed
+checkboxes) with two separate, genuinely different-weight lead paths, per explicit
+design direction referencing two outside sites for interaction/layout cues only
+(not copied content or colors):
+
+- **Contact form** (`contact.html`) is now just Name/Email/Message — low-key, for a
+  direct message. Business address and services-needed fields were dropped since
+  that qualification now happens in the quiz instead.
+- **New "Get Started" quiz** — a 5-step modal overlay, not a page navigation, modeled
+  on `sold3x.com`'s quiz mechanic (view-sourced directly: fixed-position overlay,
+  progress bar, one `.quiz-step` visible at a time via class toggle, big tappable
+  `.option-btn`-style cards that auto-advance ~200ms after selection, final step is
+  a real `<form>`). Re-implemented with MIA's own class names (`.quiz-*`) and color
+  tokens — no sold3x colors, copy, or real-estate content carried over. General
+  layout/typography confidence (bold headings, numbered/kicker patterns, soft-shadow
+  cards) loosely borrowed from `github.com/SyakNiPrimo/benedickportfolio` (cloned
+  locally to inspect `styles.css`), which also independently uses the same
+  step-modal pattern for its own lead form — cross-checked both before building.
+  - Flow: business type (mirrors the 5 Industries Served categories on
+    `about.html`) → current bookkeeping situation → service needed (mirrors the 4
+    real services, each option card carries a short version of that service's real
+    description) → timeline → contact info (Name, Email, Business Name, Phone).
+  - State persists in a single JS object across steps; Back re-shows prior
+    selections (`.is-selected`) rather than losing them.
+  - Submits to the same `/api/contact` endpoint as the plain contact form, tagged
+    `formType: "quiz"` vs `"contact"` so the (still-stubbed) backend can tell them
+    apart — see `api/contact.js`.
+  - On submit, shows an in-modal confirmation step (checkmark, "You're all set!"),
+    not a redirect — closing it resets state for the next visitor.
+  - The modal's own markup is duplicated verbatim at the end of every page's
+    `<body>` (same no-build-step pattern as the shared header/footer already used
+    across the site) — see "File structure" above for which pages carry it (all of
+    them).
+- **Every "Get Started" CTA sitewide** (header nav pill, homepage hero, all
+  closing-CTA bands, each service-detail page's CTA) now opens the quiz instead of
+  navigating to `/contact` — converted from `<a href="/contact">` to
+  `<button type="button" data-open-quiz>`. The only way to reach the plain contact
+  form now is the footer's "Contact" link, which is intentional (keeps it genuinely
+  low-key per the brief).
+- Fixed a real pre-existing bug surfaced while testing the mobile nav flyout for
+  this: `.nav-cta` in the mobile menu combined `width: 100%` (inherited from
+  `.primary-nav a`) with its own `margin: 0 24px`, overflowing ~48px off the right
+  edge of the viewport. Not something this round introduced — it affected the old
+  anchor-based CTA too — but it's the button that now launches the quiz, so it was
+  fixed here (`.primary-nav .nav-cta { width: calc(100% - 48px); }`, needed the
+  extra specificity to beat `.primary-nav button`'s `width: 100%`).
+- Verified with Playwright (installed on demand, same workaround as Round 3/4 —
+  see "Known platform quirks" below): full click-through of all 5 quiz steps
+  including Back-preserves-selection, Escape-to-close, reopen-resets-cleanly, the
+  simplified contact form's validation and success state, desktop + mobile
+  viewports, and opening the quiz from a service-detail page's CTA. Zero console/page
+  errors across the run.
+
+Still outstanding: `api/contact.js` is still the same unwired 501 stub — quiz
+submissions log to console same as contact form submissions always have, no real
+email sends yet (see "Lead capture" in README.md).
 
 ## Known platform quirks (don't re-debug these, just work around them)
 

@@ -1,8 +1,10 @@
-// PLACEHOLDER: contact form backend — not wired up in this pass.
+// PLACEHOLDER: contact + quiz backend — not wired up in this pass.
 //
 // This is a stub showing the intended shape for a serverless function
-// (Vercel/Netlify-style) that would receive the contact form payload
-// from js/script.js and email it to CONTACT_FORM_TO_EMAIL.
+// (Vercel/Netlify-style) that would receive submissions from either the
+// simple contact form or the "Get Started" quiz (both in js/script.js)
+// and email them to CONTACT_FORM_TO_EMAIL. Both flows post here — same
+// destination inbox, distinguished by `formType`.
 //
 // Nothing here actually sends email yet. Wiring this up (e.g. with
 // Resend, SendGrid, Nodemailer, etc.) is out of scope for this draft.
@@ -14,36 +16,40 @@ module.exports = async function handler(req, res) {
   }
 
   const toEmail = process.env.CONTACT_FORM_TO_EMAIL;
-  const {
-    businessName,
-    firstName,
-    lastName,
-    email,
-    phone,
-    website,
-    address,
-    servicesNeeded,
-    otherSpecify,
-  } = req.body || {};
+  const body = req.body || {};
+  const formType = body.formType === 'quiz' ? 'quiz' : 'contact';
 
-  if (!email || !(firstName || lastName)) {
-    res.status(400).json({ error: 'Email and at least one of first/last name are required.' });
+  if (!body.email || !body.name) {
+    res.status(400).json({ error: 'Name and email are required.' });
     return;
   }
 
-  // PLACEHOLDER: send `payload` to `toEmail` via an email provider here.
-  console.log('Contact form submission (not emailed — backend not wired up):', {
-    toEmail,
-    businessName,
-    firstName,
-    lastName,
-    email,
-    phone,
-    website,
-    address,
-    servicesNeeded,
-    otherSpecify,
-  });
+  if (formType === 'contact' && !body.message) {
+    res.status(400).json({ error: 'Message is required.' });
+    return;
+  }
+
+  // PLACEHOLDER: send the submission to `toEmail` via an email provider here.
+  if (formType === 'quiz') {
+    console.log('Quiz submission (not emailed — backend not wired up):', {
+      toEmail,
+      businessType: body.businessType,
+      situation: body.situation,
+      serviceNeeded: body.serviceNeeded,
+      timeline: body.timeline,
+      name: body.name,
+      email: body.email,
+      businessName: body.businessName,
+      phone: body.phone,
+    });
+  } else {
+    console.log('Contact form submission (not emailed — backend not wired up):', {
+      toEmail,
+      name: body.name,
+      email: body.email,
+      message: body.message,
+    });
+  }
 
   res.status(501).json({ error: 'Email delivery is not configured yet.' });
 };

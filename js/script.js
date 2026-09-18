@@ -8,7 +8,7 @@ if (navToggle && primaryNav) {
     navToggle.setAttribute('aria-expanded', String(isOpen));
   });
 
-  primaryNav.querySelectorAll('a').forEach((link) => {
+  primaryNav.querySelectorAll('a, button').forEach((link) => {
     link.addEventListener('click', () => {
       primaryNav.classList.remove('is-open');
       navToggle.setAttribute('aria-expanded', 'false');
@@ -16,126 +16,60 @@ if (navToggle && primaryNav) {
   });
 }
 
-// Contact form: two-step validation + submit handling
-// (guarded — service detail pages share this script but have no contact form)
-const form = document.getElementById('contactForm');
+// Simple contact form: Name, Email, Message only
+// (guarded — not every page has this form)
+const contactForm = document.getElementById('contactForm');
 
-if (form) {
-  const submitBtn = document.getElementById('submitBtn');
+if (contactForm) {
+  const nameInput = document.getElementById('contactName');
+  const emailInput = document.getElementById('contactEmail');
+  const messageInput = document.getElementById('contactMessage');
+  const nameError = document.getElementById('contactNameError');
+  const emailError = document.getElementById('contactEmailError');
+  const messageError = document.getElementById('contactMessageError');
+  const submitBtn = document.getElementById('contactSubmitBtn');
   const formStatus = document.getElementById('formStatus');
-
-  const formStep1 = document.getElementById('formStep1');
-  const formStep2 = document.getElementById('formStep2');
-  const stepIndicator1 = document.getElementById('stepIndicator1');
-  const stepIndicator2 = document.getElementById('stepIndicator2');
-  const step1NextBtn = document.getElementById('step1NextBtn');
-  const step2BackBtn = document.getElementById('step2BackBtn');
-
-  const emailInput = document.getElementById('email');
-  const firstNameInput = document.getElementById('firstName');
-  const lastNameInput = document.getElementById('lastName');
-  const emailError = document.getElementById('emailError');
-  const step1Error = document.getElementById('step1Error');
-
-  const servicesOther = document.getElementById('servicesOther');
-  const otherSpecifyRow = document.getElementById('otherSpecifyRow');
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  function validateStep1() {
+  function validateContactForm() {
     let valid = true;
+
+    if (!nameInput.value.trim()) {
+      nameError.textContent = 'Please enter your name.';
+      valid = false;
+    } else {
+      nameError.textContent = '';
+    }
 
     if (!emailInput.value.trim() || !emailPattern.test(emailInput.value.trim())) {
       emailError.textContent = 'Please enter a valid email address.';
-      emailInput.setAttribute('aria-invalid', 'true');
       valid = false;
     } else {
       emailError.textContent = '';
-      emailInput.setAttribute('aria-invalid', 'false');
     }
 
-    if (!firstNameInput.value.trim() && !lastNameInput.value.trim()) {
-      step1Error.textContent = 'Please enter your first or last name.';
+    if (!messageInput.value.trim()) {
+      messageError.textContent = 'Please enter a message.';
       valid = false;
     } else {
-      step1Error.textContent = '';
+      messageError.textContent = '';
     }
 
     return valid;
   }
 
-  [emailInput, firstNameInput, lastNameInput].forEach((input) => {
-    input.addEventListener('blur', validateStep1);
+  [nameInput, emailInput, messageInput].forEach((input) => {
+    input.addEventListener('blur', validateContactForm);
   });
 
-  function isStep2Active() {
-    return formStep2.classList.contains('is-active');
-  }
-
-  function goToStep2() {
-    if (!validateStep1()) return;
-    formStep1.classList.remove('is-active');
-    formStep2.classList.add('is-active');
-    stepIndicator1.classList.remove('is-active');
-    stepIndicator2.classList.add('is-active');
-  }
-
-  function goToStep1() {
-    formStep2.classList.remove('is-active');
-    formStep1.classList.add('is-active');
-    stepIndicator2.classList.remove('is-active');
-    stepIndicator1.classList.add('is-active');
-  }
-
-  step1NextBtn.addEventListener('click', goToStep2);
-  step2BackBtn.addEventListener('click', goToStep1);
-
-  if (servicesOther && otherSpecifyRow) {
-    servicesOther.addEventListener('change', () => {
-      otherSpecifyRow.classList.toggle('is-hidden', !servicesOther.checked);
-    });
-  }
-
-  form.addEventListener('submit', async (event) => {
+  contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    // A stray Enter keypress on step 1 submits the form natively — treat that
-    // as "go to next step" instead, since the real submit button lives on step 2.
-    if (!isStep2Active()) {
-      goToStep2();
-      return;
-    }
-
-    if (!validateStep1()) {
-      goToStep1();
-      return;
-    }
+    if (!validateContactForm()) return;
 
     formStatus.textContent = '';
     formStatus.className = 'form-status';
-
-    const servicesNeeded = Array.from(
-      form.querySelectorAll('input[name="servicesNeeded"]:checked')
-    ).map((el) => el.value);
-
-    const payload = {
-      businessName: document.getElementById('businessName').value.trim(),
-      firstName: firstNameInput.value.trim(),
-      lastName: lastNameInput.value.trim(),
-      email: emailInput.value.trim(),
-      phone: document.getElementById('phone').value.trim(),
-      website: document.getElementById('website').value.trim(),
-      address: {
-        street: document.getElementById('addressStreet').value.trim(),
-        city: document.getElementById('addressCity').value.trim(),
-        state: document.getElementById('addressState').value.trim(),
-        zip: document.getElementById('addressZip').value.trim(),
-        country: document.getElementById('addressCountry').value.trim(),
-      },
-      servicesNeeded,
-      otherSpecify: document.getElementById('otherSpecify').value.trim(),
-    };
-
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
@@ -147,7 +81,12 @@ if (form) {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          formType: 'contact',
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          message: messageInput.value.trim(),
+        }),
       });
 
       if (!response.ok) {
@@ -156,9 +95,7 @@ if (form) {
 
       formStatus.textContent = "Thanks for reaching out — we'll be in touch soon.";
       formStatus.classList.add('success');
-      form.reset();
-      otherSpecifyRow.classList.add('is-hidden');
-      goToStep1();
+      contactForm.reset();
     } catch (err) {
       formStatus.textContent =
         "Something went wrong sending your message. Please email us directly instead.";
@@ -168,4 +105,208 @@ if (form) {
       submitBtn.textContent = 'Send Message';
     }
   });
+}
+
+// Get Started quiz: multi-step modal lead qualifier
+// (guarded — every page carries the same modal markup in its footer)
+const quizOverlay = document.querySelector('[data-quiz-overlay]');
+
+if (quizOverlay) {
+  const openTriggers = document.querySelectorAll('[data-open-quiz]');
+  const closeTriggers = quizOverlay.querySelectorAll('[data-close-quiz]');
+  const finishBtn = quizOverlay.querySelector('[data-quiz-finish]');
+  const steps = Array.from(quizOverlay.querySelectorAll('[data-quiz-step]'));
+  const progressBar = quizOverlay.querySelector('[data-quiz-progress-bar]');
+  const stepLabel = quizOverlay.querySelector('[data-quiz-step-label]');
+  const backBtn = quizOverlay.querySelector('[data-quiz-back]');
+  const quizForm = quizOverlay.querySelector('[data-quiz-form]');
+  const confirmStepIndex = steps.findIndex((step) => step.hasAttribute('data-quiz-confirm'));
+  const questionStepCount = confirmStepIndex;
+
+  const state = {
+    businessType: '',
+    situation: '',
+    serviceNeeded: '',
+    timeline: '',
+    name: '',
+    email: '',
+    businessName: '',
+    phone: '',
+  };
+
+  let currentStep = 0;
+
+  function lockBody(lock) {
+    document.body.style.overflow = lock ? 'hidden' : '';
+  }
+
+  function applySelectedState() {
+    quizOverlay.querySelectorAll('[data-option-group]').forEach((group) => {
+      const key = group.dataset.optionGroup;
+      group.querySelectorAll('.quiz-option').forEach((option) => {
+        option.classList.toggle(
+          'is-selected',
+          Boolean(state[key]) && option.dataset.value === state[key]
+        );
+      });
+    });
+  }
+
+  function updateProgress() {
+    if (!progressBar || !stepLabel) return;
+    if (currentStep >= confirmStepIndex) {
+      progressBar.style.width = '100%';
+      stepLabel.textContent = "You're all set";
+      return;
+    }
+    progressBar.style.width = `${((currentStep + 1) / questionStepCount) * 100}%`;
+    stepLabel.textContent = `Step ${currentStep + 1} of ${questionStepCount}`;
+  }
+
+  function showStep(index) {
+    currentStep = Math.max(0, Math.min(index, steps.length - 1));
+    steps.forEach((step, idx) => step.classList.toggle('is-active', idx === currentStep));
+    if (backBtn) {
+      backBtn.classList.toggle('is-hidden', currentStep === 0 || currentStep >= confirmStepIndex);
+    }
+    updateProgress();
+    applySelectedState();
+  }
+
+  function resetQuiz() {
+    Object.keys(state).forEach((key) => {
+      state[key] = '';
+    });
+    if (quizForm) quizForm.reset();
+    quizOverlay.querySelectorAll('.quiz-option.is-selected').forEach((el) => {
+      el.classList.remove('is-selected');
+    });
+    quizOverlay.querySelectorAll('.form-error').forEach((el) => {
+      el.textContent = '';
+    });
+    const status = quizOverlay.querySelector('[data-quiz-status]');
+    if (status) {
+      status.textContent = '';
+      status.className = 'form-status';
+    }
+    const submitBtn = quizOverlay.querySelector('[data-quiz-submit]');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Get My Free Consultation';
+    }
+  }
+
+  function openQuiz() {
+    quizOverlay.classList.add('is-active');
+    lockBody(true);
+    showStep(0);
+  }
+
+  function closeQuiz() {
+    quizOverlay.classList.remove('is-active');
+    lockBody(false);
+  }
+
+  openTriggers.forEach((btn) => btn.addEventListener('click', openQuiz));
+  closeTriggers.forEach((btn) => btn.addEventListener('click', closeQuiz));
+
+  if (finishBtn) {
+    finishBtn.addEventListener('click', () => {
+      closeQuiz();
+      resetQuiz();
+      showStep(0);
+    });
+  }
+
+  quizOverlay.addEventListener('click', (event) => {
+    if (event.target === quizOverlay) closeQuiz();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && quizOverlay.classList.contains('is-active')) {
+      closeQuiz();
+    }
+  });
+
+  if (backBtn) {
+    backBtn.addEventListener('click', () => showStep(currentStep - 1));
+  }
+
+  quizOverlay.querySelectorAll('[data-option-group]').forEach((group) => {
+    group.addEventListener('click', (event) => {
+      const option = event.target.closest('.quiz-option');
+      if (!option) return;
+      const key = group.dataset.optionGroup;
+      state[key] = option.dataset.value;
+      group.querySelectorAll('.quiz-option').forEach((el) => el.classList.remove('is-selected'));
+      option.classList.add('is-selected');
+      window.setTimeout(() => showStep(currentStep + 1), 220);
+    });
+  });
+
+  if (quizForm) {
+    const quizNameInput = document.getElementById('quizName');
+    const quizEmailInput = document.getElementById('quizEmail');
+    const quizBusinessNameInput = document.getElementById('quizBusinessName');
+    const quizPhoneInput = document.getElementById('quizPhone');
+    const quizNameError = quizForm.querySelector('[data-quiz-error="name"]');
+    const quizEmailError = quizForm.querySelector('[data-quiz-error="email"]');
+    const quizStatus = quizForm.querySelector('[data-quiz-status]');
+    const quizSubmitBtn = quizForm.querySelector('[data-quiz-submit]');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    quizForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      let valid = true;
+
+      if (!quizNameInput.value.trim()) {
+        quizNameError.textContent = 'Please enter your name.';
+        valid = false;
+      } else {
+        quizNameError.textContent = '';
+      }
+
+      if (!quizEmailInput.value.trim() || !emailPattern.test(quizEmailInput.value.trim())) {
+        quizEmailError.textContent = 'Please enter a valid email address.';
+        valid = false;
+      } else {
+        quizEmailError.textContent = '';
+      }
+
+      if (!valid) return;
+
+      state.name = quizNameInput.value.trim();
+      state.email = quizEmailInput.value.trim();
+      state.businessName = quizBusinessNameInput.value.trim();
+      state.phone = quizPhoneInput.value.trim();
+
+      quizStatus.textContent = '';
+      quizStatus.className = 'form-status';
+      quizSubmitBtn.disabled = true;
+      quizSubmitBtn.textContent = 'Submitting...';
+
+      try {
+        // Same draft-stage endpoint as the contact form (see api/contact.js) —
+        // not wired to real email delivery yet.
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ formType: 'quiz', ...state }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+
+        showStep(confirmStepIndex);
+      } catch (err) {
+        quizStatus.textContent =
+          'Something went wrong submitting your answers. Please email us directly instead.';
+        quizStatus.classList.add('error');
+      } finally {
+        quizSubmitBtn.disabled = false;
+        quizSubmitBtn.textContent = 'Get My Free Consultation';
+      }
+    });
+  }
 }

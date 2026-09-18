@@ -248,11 +248,17 @@ textarea:focus-visible {
 }
 
 .nav-cta {
+  display: inline-block;
   background: var(--color-primary);
   color: #fff !important;
   padding: 8px 18px;
+  border: none;
   border-radius: 999px;
   font-weight: 600 !important;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .nav-cta:hover {
@@ -666,66 +672,6 @@ textarea:focus-visible {
   color: var(--color-error);
 }
 
-.form-steps-indicator {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.form-steps-indicator .step {
-  padding: 4px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
-  color: var(--color-ink-soft);
-}
-
-.form-steps-indicator .step.is-active {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
-}
-
-.form-step {
-  display: none;
-}
-
-.form-step.is-active {
-  display: block;
-}
-
-.address-fields {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px 12px;
-}
-
-.address-fields .form-row {
-  margin-bottom: 0;
-}
-
-.checkbox-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.checkbox-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 500;
-}
-
-.checkbox-row input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 auto;
-}
-
 .form-nav-buttons {
   display: flex;
   justify-content: space-between;
@@ -746,6 +692,233 @@ textarea:focus-visible {
 
 .is-hidden {
   display: none !important;
+}
+
+/* ---------- Get Started quiz ---------- */
+.quiz-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(37, 49, 59, 0.72);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.quiz-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.quiz-shell {
+  width: min(640px, 100%);
+  max-height: min(90vh, 760px);
+  overflow-y: auto;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: 0 30px 80px rgba(18, 24, 29, 0.35);
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.25s ease;
+}
+
+.quiz-overlay.is-active .quiz-shell {
+  transform: translateY(0) scale(1);
+}
+
+.quiz-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.quiz-top h2 {
+  margin: 4px 0 0;
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  color: var(--color-ink);
+}
+
+.quiz-label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+.quiz-close {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-ink-soft);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.quiz-close:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.quiz-progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-bg-alt);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.quiz-progress-bar {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+  transition: width 0.25s ease;
+}
+
+.quiz-back {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-ink-soft);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.quiz-back:hover {
+  color: var(--color-accent);
+}
+
+.quiz-step {
+  display: none;
+}
+
+.quiz-step.is-active {
+  display: block;
+}
+
+.quiz-step h3 {
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+.quiz-step-copy {
+  color: var(--color-ink-soft);
+  margin-bottom: 24px;
+}
+
+.quiz-option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.quiz-option-grid-wide {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.quiz-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 18px 20px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-alt);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.quiz-option:hover {
+  border-color: var(--color-primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.quiz-option.is-selected {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.quiz-option-detailed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.quiz-option-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.quiz-option-desc {
+  display: block;
+  font-weight: 400;
+  font-size: 0.88rem;
+  color: var(--color-ink-soft);
+}
+
+.quiz-option.is-selected .quiz-option-desc {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.quiz-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.quiz-confirm {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.quiz-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: #fff;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.quiz-confirm h3 {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+}
+
+.quiz-confirm .btn {
+  margin-top: 12px;
 }
 
 /* ---------- Closing CTA band ---------- */
@@ -955,14 +1128,16 @@ textarea:focus-visible {
     max-height: 320px;
   }
 
-  .primary-nav a {
+  .primary-nav a,
+  .primary-nav button {
     width: 100%;
     padding: 14px 24px;
     border-top: 1px solid var(--color-border);
     color: var(--color-ink-soft);
   }
 
-  .nav-cta {
+  .primary-nav .nav-cta {
+    width: calc(100% - 48px);
     margin: 12px 24px;
     text-align: center;
   }
