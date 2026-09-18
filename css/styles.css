@@ -409,12 +409,7 @@ textarea:focus-visible {
 .service-card h3 {
   font-size: 1.15rem;
   color: var(--color-primary-dark);
-}
-
-.service-card p {
-  color: var(--color-ink-soft);
-  font-size: 0.95rem;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .service-card-link {
