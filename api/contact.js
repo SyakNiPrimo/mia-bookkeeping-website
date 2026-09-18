@@ -19,8 +19,10 @@ module.exports = async function handler(req, res) {
   const body = req.body || {};
   const formType = body.formType === 'quiz' ? 'quiz' : 'contact';
 
-  if (!body.email || !body.name) {
-    res.status(400).json({ error: 'Name and email are required.' });
+  if (!body.email || !body.name || !body.businessName || !body.address) {
+    res.status(400).json({
+      error: 'Name, email, business name, and business address are required.',
+    });
     return;
   }
 
@@ -40,6 +42,8 @@ module.exports = async function handler(req, res) {
       name: body.name,
       email: body.email,
       businessName: body.businessName,
+      address: body.address,
+      website: body.website,
       phone: body.phone,
     });
   } else {
@@ -47,6 +51,9 @@ module.exports = async function handler(req, res) {
       toEmail,
       name: body.name,
       email: body.email,
+      businessName: body.businessName,
+      address: body.address,
+      website: body.website,
       message: body.message,
     });
   }

@@ -244,8 +244,20 @@
           </div>
 
           <div class="form-row">
-            <label for="quizBusinessName">Business Name</label>
-            <input type="text" id="quizBusinessName" name="businessName" autocomplete="organization">
+            <label for="quizBusinessName">Business Name <span aria-hidden="true">*</span></label>
+            <input type="text" id="quizBusinessName" name="businessName" autocomplete="organization" required>
+            <span class="form-error" data-quiz-error="businessName" role="alert"></span>
+          </div>
+
+          <div class="form-row">
+            <label for="quizAddress">Business Address <span aria-hidden="true">*</span></label>
+            <input type="text" id="quizAddress" name="address" autocomplete="street-address" required>
+            <span class="form-error" data-quiz-error="address" role="alert"></span>
+          </div>
+
+          <div class="form-row">
+            <label for="quizWebsite">Website (optional)</label>
+            <input type="url" id="quizWebsite" name="website" autocomplete="url" placeholder="https://">
           </div>
 
           <div class="form-row">

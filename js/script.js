@@ -55,9 +55,14 @@ const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   const nameInput = document.getElementById('contactName');
   const emailInput = document.getElementById('contactEmail');
+  const businessNameInput = document.getElementById('contactBusinessName');
+  const addressInput = document.getElementById('contactAddress');
+  const websiteInput = document.getElementById('contactWebsite');
   const messageInput = document.getElementById('contactMessage');
   const nameError = document.getElementById('contactNameError');
   const emailError = document.getElementById('contactEmailError');
+  const businessNameError = document.getElementById('contactBusinessNameError');
+  const addressError = document.getElementById('contactAddressError');
   const messageError = document.getElementById('contactMessageError');
   const submitBtn = document.getElementById('contactSubmitBtn');
   const formStatus = document.getElementById('formStatus');
@@ -81,6 +86,20 @@ if (contactForm) {
       emailError.textContent = '';
     }
 
+    if (!businessNameInput.value.trim()) {
+      businessNameError.textContent = 'Please enter your business name.';
+      valid = false;
+    } else {
+      businessNameError.textContent = '';
+    }
+
+    if (!addressInput.value.trim()) {
+      addressError.textContent = 'Please enter your business address.';
+      valid = false;
+    } else {
+      addressError.textContent = '';
+    }
+
     if (!messageInput.value.trim()) {
       messageError.textContent = 'Please enter a message.';
       valid = false;
@@ -91,7 +110,7 @@ if (contactForm) {
     return valid;
   }
 
-  [nameInput, emailInput, messageInput].forEach((input) => {
+  [nameInput, emailInput, businessNameInput, addressInput, messageInput].forEach((input) => {
     input.addEventListener('blur', validateContactForm);
   });
 
@@ -117,6 +136,9 @@ if (contactForm) {
           formType: 'contact',
           name: nameInput.value.trim(),
           email: emailInput.value.trim(),
+          businessName: businessNameInput.value.trim(),
+          address: addressInput.value.trim(),
+          website: websiteInput.value.trim(),
           message: messageInput.value.trim(),
         }),
       });
@@ -163,6 +185,8 @@ if (quizOverlay) {
     name: '',
     email: '',
     businessName: '',
+    address: '',
+    website: '',
     phone: '',
   };
 
@@ -280,9 +304,13 @@ if (quizOverlay) {
     const quizNameInput = document.getElementById('quizName');
     const quizEmailInput = document.getElementById('quizEmail');
     const quizBusinessNameInput = document.getElementById('quizBusinessName');
+    const quizAddressInput = document.getElementById('quizAddress');
+    const quizWebsiteInput = document.getElementById('quizWebsite');
     const quizPhoneInput = document.getElementById('quizPhone');
     const quizNameError = quizForm.querySelector('[data-quiz-error="name"]');
     const quizEmailError = quizForm.querySelector('[data-quiz-error="email"]');
+    const quizBusinessNameError = quizForm.querySelector('[data-quiz-error="businessName"]');
+    const quizAddressError = quizForm.querySelector('[data-quiz-error="address"]');
     const quizStatus = quizForm.querySelector('[data-quiz-status]');
     const quizSubmitBtn = quizForm.querySelector('[data-quiz-submit]');
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -305,11 +333,27 @@ if (quizOverlay) {
         quizEmailError.textContent = '';
       }
 
+      if (!quizBusinessNameInput.value.trim()) {
+        quizBusinessNameError.textContent = 'Please enter your business name.';
+        valid = false;
+      } else {
+        quizBusinessNameError.textContent = '';
+      }
+
+      if (!quizAddressInput.value.trim()) {
+        quizAddressError.textContent = 'Please enter your business address.';
+        valid = false;
+      } else {
+        quizAddressError.textContent = '';
+      }
+
       if (!valid) return;
 
       state.name = quizNameInput.value.trim();
       state.email = quizEmailInput.value.trim();
       state.businessName = quizBusinessNameInput.value.trim();
+      state.address = quizAddressInput.value.trim();
+      state.website = quizWebsiteInput.value.trim();
       state.phone = quizPhoneInput.value.trim();
 
       quizStatus.textContent = '';
