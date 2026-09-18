@@ -316,19 +316,22 @@ textarea:focus-visible {
 /* ---------- Certification badges (trust band) ---------- */
 .trust-band {
   background: var(--color-primary-dark);
-  padding: 28px 0;
+  padding: 32px 0;
 }
 
 .trust-marquee {
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
 }
 
 .trust-track {
   display: flex;
   align-items: center;
-  gap: 56px;
+  gap: 22px;
   width: max-content;
-  animation: trustScroll 18s linear infinite;
+  animation: trustScroll 16s linear infinite;
+  will-change: transform;
 }
 
 .trust-marquee:hover .trust-track {
@@ -348,11 +351,28 @@ textarea:focus-visible {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 104px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.trust-badge:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .trust-badge img {
-  height: 88px;
+  max-height: 72px;
+  max-width: 100%;
   width: auto;
+  object-fit: contain;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1122,13 +1142,19 @@ textarea:focus-visible {
 }
 
 @media (max-width: 720px) {
+  .trust-badge {
+    width: 150px;
+    height: 82px;
+    padding: 10px 14px;
+  }
+
   .trust-badge img {
-    height: 64px;
+    max-height: 52px;
   }
 
   .trust-track {
-    gap: 40px;
-    animation-duration: 14s;
+    gap: 16px;
+    animation-duration: 13s;
   }
 
   .nav-toggle {
