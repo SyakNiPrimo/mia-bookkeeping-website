@@ -388,6 +388,57 @@ textarea:focus-visible {
   }
 }
 
+/* ---------- Who We Help ---------- */
+.who-we-help {
+  padding: 72px 0;
+  background: var(--color-bg-alt);
+  text-align: center;
+}
+
+.who-we-help .section-title,
+.who-we-help .section-subtitle {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.who-we-help-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  max-width: 800px;
+  margin: 32px auto 0;
+  padding: 0;
+  text-align: left;
+}
+
+.who-we-help-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-soft);
+  font-weight: 500;
+}
+
+.who-we-help-list .check {
+  color: var(--color-accent);
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
+.who-we-help-closer {
+  margin: 28px 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-primary-dark);
+}
+
 /* ---------- Services ---------- */
 .services {
   padding: 72px 0;
@@ -707,6 +758,29 @@ textarea:focus-visible {
   font-weight: 600;
   font-size: 0.9rem;
   white-space: nowrap;
+}
+
+.industry-category-label {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.industry-category-label::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  margin-left: 20px;
+  background: var(--color-border);
 }
 
 @media (prefers-reduced-motion: reduce) {

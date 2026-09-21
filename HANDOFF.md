@@ -500,6 +500,68 @@ presentation, "Who We Help" section) and LOWER priority (SEO tags, mobile
 polish pass, image refinements, footer line) items, plus "Meet Our Team"
 (blocked on her sending team names/roles).
 
+### Round 8 — client feedback pass 2 (Mitzi's MEDIUM priority items)
+
+Implements 4 of her 5 MEDIUM priority items. Testimonial presentation (her
+#11) is intentionally not touched this round — see below for why. LOWER
+priority items (SEO, mobile-specific polish, image refinements, footer line)
+and "Meet Our Team" remain deferred, same reasons as Round 7.
+
+- **About page storytelling (her #8)** — added a new paragraph after the
+  existing bio, close to her suggested copy, covering why Mitzi started MIA
+  Bookkeeping and what working with her should feel like. Kept it in the
+  page's existing third-person bio voice rather than switching to first
+  person like her example text — her example was illustrative, and
+  switching voice for one new paragraph while the rest of the page stays
+  third-person would have read as inconsistent.
+- **"What Makes Us Different" specificity (her #9)** — replaced Accuracy,
+  Communication, and Accountability with her exact supplied copy.
+  Consistency wasn't given a replacement in her notes, so it was tightened
+  to match the new concrete, process-specific register of the other three
+  rather than left generic.
+- **Industries reorganization + renaming (her #10, #12)** — About page's
+  industries grid was already grouped by category exactly as she asked
+  (unchanged); only needed the heading rename. The homepage's industries
+  *marquee* (a later addition, not present when she reviewed the live
+  site) was the actual flat, ungrouped list she was reacting to. Rather
+  than abandon the marquee format, added distinct category-label pills
+  (bold, accent-colored, with a divider) interspersed between each
+  category's tags in both scrolling rows, respecting the same 5 category
+  boundaries as the About page grid — so grouping is visible even while
+  scrolling. "Industries I've Worked With" → "Industries We Serve" on both
+  index.html and about.html (her point about sounding like an established
+  firm rather than a solo freelancer portfolio). Her related point #12
+  ("don't over-promise specialization," use "Experience across diverse
+  industries" framing) was already satisfied — about.html's eyebrow already
+  reads "Experience Across Diverse Industries."
+- **"Who We Help" section (her #24)** — new homepage section using her
+  supplied heading, checklist, and closing line verbatim, placed right
+  after the trust band and before Services (her own homepage-flow sketch
+  in note #14 didn't actually include this section in its ordering, so
+  this placement is a judgment call — it works as a self-identification
+  step before showing what's offered).
+- **Testimonial presentation (her #11) — deliberately not implemented.**
+  Her ask (shorten the long first testimonial, or add a "Read more") is
+  now in direct tension with the masonry layout shipped in Round 6 at
+  Benedick's explicit request, which specifically removed a similar
+  "See more" truncation mechanic in favor of always showing full quotes.
+  Beyond the UX tension, shortening the actual quoted text would mean
+  editing a real client's words presented as a direct quote — not a call
+  to make unilaterally without the testimonial-giver's sign-off. Masonry's
+  natural packing already avoids forcing the three short testimonials to
+  stretch to match the long one's height, which addresses part of her
+  underlying complaint. Flagged back to the user rather than silently
+  implementing something that either alters a client quote or reverses a
+  very recent explicit design decision.
+- Verified with Playwright: Who We Help section renders in the right
+  homepage position, industries headings read "Industries We Serve" on
+  both pages, category-label count matches (5 categories × 2 for the
+  seamless loop = 10), About page shows exactly one new paragraph with the
+  new differentiator copy, mobile screenshots of both new/changed sections.
+  Re-ran the Round 5–7 regression suite (quiz, contact form, badges,
+  footer) — no regressions, aside from updating the quiz test script's own
+  fixture to stop filling the now-removed `#quizAddress` field.
+
 ## Known platform quirks (don't re-debug these, just work around them)
 
 - **This Vercel MCP integration cannot create Production deployments via API** for
