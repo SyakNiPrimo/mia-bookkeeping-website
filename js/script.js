@@ -24,13 +24,12 @@ if (contactForm) {
   const nameInput = document.getElementById('contactName');
   const emailInput = document.getElementById('contactEmail');
   const businessNameInput = document.getElementById('contactBusinessName');
-  const addressInput = document.getElementById('contactAddress');
   const websiteInput = document.getElementById('contactWebsite');
+  const phoneInput = document.getElementById('contactPhone');
   const messageInput = document.getElementById('contactMessage');
   const nameError = document.getElementById('contactNameError');
   const emailError = document.getElementById('contactEmailError');
   const businessNameError = document.getElementById('contactBusinessNameError');
-  const addressError = document.getElementById('contactAddressError');
   const messageError = document.getElementById('contactMessageError');
   const submitBtn = document.getElementById('contactSubmitBtn');
   const formStatus = document.getElementById('formStatus');
@@ -61,15 +60,8 @@ if (contactForm) {
       businessNameError.textContent = '';
     }
 
-    if (!addressInput.value.trim()) {
-      addressError.textContent = 'Please enter your business address.';
-      valid = false;
-    } else {
-      addressError.textContent = '';
-    }
-
     if (!messageInput.value.trim()) {
-      messageError.textContent = 'Please enter a message.';
+      messageError.textContent = 'Please tell us what you need help with.';
       valid = false;
     } else {
       messageError.textContent = '';
@@ -78,7 +70,7 @@ if (contactForm) {
     return valid;
   }
 
-  [nameInput, emailInput, businessNameInput, addressInput, messageInput].forEach((input) => {
+  [nameInput, emailInput, businessNameInput, messageInput].forEach((input) => {
     input.addEventListener('blur', validateContactForm);
   });
 
@@ -93,10 +85,6 @@ if (contactForm) {
     submitBtn.textContent = 'Sending...';
 
     try {
-      // Draft-stage endpoint: intended to hand off to a server function that
-      // emails CONTACT_FORM_TO_EMAIL (see api/contact.js). Not wired up yet,
-      // so this will fail until a backend is deployed — that's expected for
-      // this pass and demonstrates the error state below.
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -105,8 +93,8 @@ if (contactForm) {
           name: nameInput.value.trim(),
           email: emailInput.value.trim(),
           businessName: businessNameInput.value.trim(),
-          address: addressInput.value.trim(),
           website: websiteInput.value.trim(),
+          phone: phoneInput.value.trim(),
           message: messageInput.value.trim(),
         }),
       });
@@ -153,9 +141,9 @@ if (quizOverlay) {
     name: '',
     email: '',
     businessName: '',
-    address: '',
     website: '',
     phone: '',
+    notes: '',
   };
 
   let currentStep = 0;
@@ -216,7 +204,7 @@ if (quizOverlay) {
     const submitBtn = quizOverlay.querySelector('[data-quiz-submit]');
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Get My Free Consultation';
+      submitBtn.textContent = 'Request a Free Consultation';
     }
   }
 
@@ -272,13 +260,12 @@ if (quizOverlay) {
     const quizNameInput = document.getElementById('quizName');
     const quizEmailInput = document.getElementById('quizEmail');
     const quizBusinessNameInput = document.getElementById('quizBusinessName');
-    const quizAddressInput = document.getElementById('quizAddress');
     const quizWebsiteInput = document.getElementById('quizWebsite');
     const quizPhoneInput = document.getElementById('quizPhone');
+    const quizNotesInput = document.getElementById('quizNotes');
     const quizNameError = quizForm.querySelector('[data-quiz-error="name"]');
     const quizEmailError = quizForm.querySelector('[data-quiz-error="email"]');
     const quizBusinessNameError = quizForm.querySelector('[data-quiz-error="businessName"]');
-    const quizAddressError = quizForm.querySelector('[data-quiz-error="address"]');
     const quizStatus = quizForm.querySelector('[data-quiz-status]');
     const quizSubmitBtn = quizForm.querySelector('[data-quiz-submit]');
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -308,21 +295,14 @@ if (quizOverlay) {
         quizBusinessNameError.textContent = '';
       }
 
-      if (!quizAddressInput.value.trim()) {
-        quizAddressError.textContent = 'Please enter your business address.';
-        valid = false;
-      } else {
-        quizAddressError.textContent = '';
-      }
-
       if (!valid) return;
 
       state.name = quizNameInput.value.trim();
       state.email = quizEmailInput.value.trim();
       state.businessName = quizBusinessNameInput.value.trim();
-      state.address = quizAddressInput.value.trim();
       state.website = quizWebsiteInput.value.trim();
       state.phone = quizPhoneInput.value.trim();
+      state.notes = quizNotesInput.value.trim();
 
       quizStatus.textContent = '';
       quizStatus.className = 'form-status';
@@ -330,8 +310,6 @@ if (quizOverlay) {
       quizSubmitBtn.textContent = 'Submitting...';
 
       try {
-        // Same draft-stage endpoint as the contact form (see api/contact.js) —
-        // not wired to real email delivery yet.
         const response = await fetch('/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -349,7 +327,7 @@ if (quizOverlay) {
         quizStatus.classList.add('error');
       } finally {
         quizSubmitBtn.disabled = false;
-        quizSubmitBtn.textContent = 'Get My Free Consultation';
+        quizSubmitBtn.textContent = 'Request a Free Consultation';
       }
     });
   }

@@ -34,20 +34,23 @@ logo artwork. If a different final lockup or palette is provided later,
 swap the images in `assets/img/` and update the `--color-*` tokens at the
 top of `css/styles.css`.
 
-## Lead capture: contact form + "Get Started" quiz
+## Lead capture: contact form + "Book a Free Consultation" quiz
 
 There are two separate, intentionally different-weight lead paths:
 
 - **Contact form** (`contact.html`, reached via the footer's "Contact" link) — a
-  low-key Name/Email/Message form for people who just want to send a direct
-  message. Validates client-side and shows success/error states.
-- **"Get Started" quiz** — a 5-step modal (progress bar, one question per
-  screen, big tappable option cards, Back navigation, final step collects
-  contact info) launched from every "Get Started" button sitewide (header nav,
-  hero, closing CTAs, service-detail CTAs). Its markup/JS/CSS live in
-  `js/script.js` (`data-quiz-*` attributes) and `css/styles.css`
-  (`.quiz-*` classes); the modal HTML itself is duplicated at the end of every
-  page's `<body>`, same pattern as the shared header/footer.
+  low-key form (Name, Email, Business Name, Website, Phone, "What do you need
+  help with?") for people who just want to send a direct message. No business
+  address is collected here — dropped per client feedback as too much friction
+  for a first touch. Validates client-side and shows success/error states.
+- **"Book a Free Consultation" quiz** — a 5-step modal (progress bar, one
+  question per screen, big tappable option cards, Back navigation, final step
+  collects contact info + an optional free-text note) launched from every
+  "Book a Free Consultation" button sitewide (header nav, hero, closing CTAs,
+  service-detail CTAs). Its markup/JS/CSS live in `js/script.js`
+  (`data-quiz-*` attributes) and `css/styles.css` (`.quiz-*` classes); the
+  modal HTML itself is duplicated at the end of every page's `<body>`, same
+  pattern as the shared header/footer.
 
 Both submit to the same endpoint, `POST /api/contact`, tagged with a
 `formType` field (`"contact"` or `"quiz"`) so the backend can tell them apart.

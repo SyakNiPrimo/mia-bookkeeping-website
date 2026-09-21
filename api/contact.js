@@ -20,9 +20,9 @@ module.exports = async function handler(req, res) {
   const body = req.body || {};
   const formType = body.formType === 'quiz' ? 'quiz' : 'contact';
 
-  if (!body.email || !body.name || !body.businessName || !body.address) {
+  if (!body.email || !body.name || !body.businessName) {
     res.status(400).json({
-      error: 'Name, email, business name, and business address are required.',
+      error: 'Name, email, and business name are required.',
     });
     return;
   }
@@ -103,22 +103,22 @@ function buildContactEmail(body) {
     ['Name', body.name],
     ['Email', body.email],
     ['Business Name', body.businessName],
-    ['Business Address', body.address],
     ['Website', body.website],
+    ['Phone', body.phone],
   ];
 
   const subject = `New contact form message from ${body.name}`;
   const text = [
     ...rows.map(([label, value]) => `${label}: ${value || '—'}`),
     '',
-    'Message:',
+    'What they need help with:',
     body.message,
   ].join('\n');
 
   const html = `
     <h2 style="font-family:sans-serif;">New contact form message</h2>
     ${renderTable(rows)}
-    <p style="font-family:sans-serif;"><strong>Message:</strong></p>
+    <p style="font-family:sans-serif;"><strong>What they need help with:</strong></p>
     <p style="font-family:sans-serif;">${escapeHtml(body.message).replace(/\n/g, '<br>')}</p>
   `;
 
@@ -134,16 +134,22 @@ function buildQuizEmail(body) {
     ['Name', body.name],
     ['Email', body.email],
     ['Business Name', body.businessName],
-    ['Business Address', body.address],
     ['Website', body.website],
     ['Phone', body.phone],
   ];
 
   const subject = `New consultation request from ${body.name}`;
-  const text = rows.map(([label, value]) => `${label}: ${value || '—'}`).join('\n');
+  const text = [
+    ...rows.map(([label, value]) => `${label}: ${value || '—'}`),
+    '',
+    'Notes:',
+    body.notes || '—',
+  ].join('\n');
   const html = `
     <h2 style="font-family:sans-serif;">New "Get Started" quiz submission</h2>
     ${renderTable(rows)}
+    <p style="font-family:sans-serif;"><strong>Notes:</strong></p>
+    <p style="font-family:sans-serif;">${escapeHtml(body.notes || '—').replace(/\n/g, '<br>')}</p>
   `;
 
   return { subject, text, html };

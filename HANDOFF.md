@@ -412,6 +412,94 @@ above). This resolves the last item on that round's "still outstanding" list.
   band, desktop + mobile screenshots, zero console/request errors. Re-ran the full
   Round 5 quiz regression suite afterward — no regressions.
 
+### Round 7 — client feedback pass 1 (Mitzi's 30-point review, HIGH priority items)
+
+Mitzi sent a full page-by-page review of the live site with 30 numbered notes and
+her own HIGH/MEDIUM/LOWER priority phasing. This round implements only the 7
+items she marked HIGH priority; MEDIUM (About page storytelling, "What Makes Us
+Different" specificity, industries reorganization, testimonial presentation
+tweaks, a "Who We Help" section) and LOWER (SEO, mobile-specific polish, image
+refinements, footer line) are intentionally deferred to a follow-up round. Her
+separate "Meet Our Team" suggestion is also not implemented — she explicitly
+asked for team member names/roles before drafting it, and none have been
+provided (About page still only ever describes Mitzi as a solo founder).
+
+- **Homepage messaging (her #1)** — new H1 using her supplied copy verbatim
+  ("Full-cycle bookkeeping for U.S. small businesses — from day-to-day
+  bookkeeping and reconciliations to cleanup, reporting, and tax-ready books.")
+  and her supplied supporting line, replacing "Accurate books. Clear
+  financials. Wherever you are." Eyebrow changed to "QuickBooks Online
+  Bookkeeping for U.S. Small Businesses" — doubles as a soft SEO win (her
+  point #25 lists this exact phrase). Dropped the old third hero paragraph
+  as redundant with the new copy. Added a one-line certification caption
+  under the trust band (her #3): "QuickBooks Online Certified ProAdvisor
+  with hands-on experience supporting U.S. businesses."
+- **Tax-ready positioning (her #2)** — new `.tax-ready` section on the
+  homepage, placed after Services and before Testimonials (not a full
+  homepage reflow — just this one section inserted in a sensible spot).
+  Copy is close to what she drafted, with her CPA-collaboration note (her
+  separate point #8) folded into the closing sentence rather than adding a
+  whole second section for it. Deliberately avoided any wording that could
+  read as "we prepare your taxes" — stayed to "tax-ready," "hand off to
+  your tax professional," "work alongside your CPA."
+- **Service descriptions (her #3)** — reviewed against her example bullet
+  list for Full-Cycle Bookkeeping; the `services/*.html` detail pages
+  already covered everything she listed (and more) from earlier rounds, so
+  no content changes were needed there. Not touched.
+- **CTA wording (her #4)** — every "Get Started" button sitewide (header
+  nav pill, homepage hero, all closing-CTA bands) renamed to "Book a Free
+  Consultation" across all 8 pages. The quiz's own final-step submit button
+  is separately renamed to "Request a Free Consultation" per her more
+  specific note (#20) that "Request" is more accurate than "Book" since
+  the form only submits an inquiry — nothing here actually schedules a
+  calendar event. Service-detail page CTAs (e.g. "Let's Discuss Your
+  Payroll Needs") were left untouched — those aren't "Get Started" buttons.
+- **Business Address (her #5)** — removed entirely from both the contact
+  form and the quiz's final step, not just made optional. Her priority
+  list says "reconsider," but her own explicit field list for the contact
+  form (note #17: Name, Email, Business Name, Website, Phone, "What do you
+  need help with?") omits Address altogether, so that's what was built.
+  Contact form gained a Phone field (didn't exist before) to match that
+  list, and Message was relabeled "What do you need help with?". Updated
+  validation in `js/script.js` and required-field checks in
+  `api/contact.js` accordingly — Business Address no longer exists
+  anywhere in the payload shape.
+- **Timezone wording (her #6)** — contact page's Availability/Serving
+  bullets rewritten per her exact suggested fix, removing the
+  EST-vs-Philippine-Time GMT+8 comparison she flagged as technically wrong
+  (EST/EDT shifts with U.S. daylight saving; Philippine Time doesn't).
+- **Consultation form messaging (her #7)** — quiz's timeline step copy
+  softened from "This helps us prioritize your consultation" (her concern:
+  "prioritize" could imply lower-priority treatment for "Just exploring"
+  answers) to "This helps us understand your timeline and prepare for our
+  conversation." Added a new optional free-text field ("Tell us a little
+  about what you need help with") to the quiz's final step, per her #18 —
+  the quiz JS state object and `api/contact.js`'s email template both carry
+  a `notes` field now.
+- Also varied the repeated "Wherever your business is based" phrasing (her
+  #22) on the homepage/about/contact hero and closing-CTA copy — not its
+  own priority item, but cheap to fix alongside the hero rewrite and
+  directly requested.
+- Verified with Playwright: new hero H1/caption/tax-ready section render
+  correctly and in the right position (`section-order` check), CTA text is
+  "Book a Free Consultation" everywhere including the mobile nav flyout
+  (fits on one line, no wrap), quiz has zero `#quizAddress` elements
+  anywhere but does have `#quizNotes`, quiz submit button reads "Request a
+  Free Consultation," contact form's field/label order and empty-submit
+  error set match the new shape exactly, full quiz + contact submissions
+  captured via mocked `/api/contact` show the expected payload shape (no
+  `address` key, `notes`/`phone` present). Re-ran the Round 5/6 regression
+  suites (badges, testimonials, footer) — no regressions. Also updated
+  `api/contact.js`'s local mock test (`test-contact-api.js`, scratchpad —
+  not committed) to drop `address` from its fixtures and confirmed the
+  400/500/502/405 status-code paths still behave correctly.
+
+Still outstanding from Mitzi's feedback: MEDIUM priority (About page
+storytelling, differentiator specificity, industries reorg, testimonial
+presentation, "Who We Help" section) and LOWER priority (SEO tags, mobile
+polish pass, image refinements, footer line) items, plus "Meet Our Team"
+(blocked on her sending team names/roles).
+
 ## Known platform quirks (don't re-debug these, just work around them)
 
 - **This Vercel MCP integration cannot create Production deployments via API** for

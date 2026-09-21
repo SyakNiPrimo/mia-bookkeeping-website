@@ -33,7 +33,7 @@
       <a href="/">Home</a>
       <a href="/services">Services</a>
       <a href="/about">About</a>
-      <button type="button" class="nav-cta" data-open-quiz>Get Started</button>
+      <button type="button" class="nav-cta" data-open-quiz>Book a Free Consultation</button>
     </nav>
   </div>
 </header>
@@ -46,8 +46,8 @@
       <p class="eyebrow">Contact</p>
       <h1>Let's talk books.</h1>
       <p class="hero-copy">
-        Wherever your business is based, we'd love to hear from you. Send a message and we'll
-        get back to you shortly.
+        Serving businesses across the United States. Send a message and we'll get back to you
+        shortly.
       </p>
     </div>
   </section>
@@ -61,8 +61,8 @@
         <ul class="contact-details">
           <li><strong>Email:</strong> <a href="mailto:mitzi@miabookkeeping.com">mitzi@miabookkeeping.com</a></li>
           <li><strong>Phone / WhatsApp:</strong> <a href="tel:+639064769031">+63 906 476 9031</a></li>
-          <li><strong>Availability:</strong> 8:00 AM–5:00 PM EST, aligned with U.S. business hours (GMT+8, Philippine Time) — typical response within one business day</li>
-          <li><strong>Serving:</strong> Businesses across the United States, remote-first</li>
+          <li><strong>Availability:</strong> Available during U.S. business hours, with scheduling aligned to your time zone — typical response within one business day</li>
+          <li><strong>Serving:</strong> Based in the Philippines, serving businesses across the United States remotely</li>
         </ul>
       </div>
 
@@ -86,18 +86,17 @@
         </div>
 
         <div class="form-row">
-          <label for="contactAddress">Business Address <span aria-hidden="true">*</span></label>
-          <input type="text" id="contactAddress" name="address" autocomplete="street-address" required>
-          <span class="form-error" id="contactAddressError" role="alert"></span>
-        </div>
-
-        <div class="form-row">
           <label for="contactWebsite">Website (optional)</label>
           <input type="url" id="contactWebsite" name="website" autocomplete="url" placeholder="https://">
         </div>
 
         <div class="form-row">
-          <label for="contactMessage">Message <span aria-hidden="true">*</span></label>
+          <label for="contactPhone">Phone (optional)</label>
+          <input type="tel" id="contactPhone" name="phone" autocomplete="tel">
+        </div>
+
+        <div class="form-row">
+          <label for="contactMessage">What do you need help with? <span aria-hidden="true">*</span></label>
           <textarea id="contactMessage" name="message" rows="5" required></textarea>
           <span class="form-error" id="contactMessageError" role="alert"></span>
         </div>
@@ -228,7 +227,7 @@
       <!-- Step 4 -->
       <div class="quiz-step" data-quiz-step>
         <h3>How soon are you looking to get this sorted?</h3>
-        <p class="quiz-step-copy">This helps us prioritize your consultation.</p>
+        <p class="quiz-step-copy">This helps us understand your timeline and prepare for our conversation.</p>
         <div class="quiz-option-grid" data-option-group="timeline">
           <button class="quiz-option" type="button" data-value="ASAP">ASAP</button>
           <button class="quiz-option" type="button" data-value="Within a month">Within a month</button>
@@ -262,12 +261,6 @@
           </div>
 
           <div class="form-row">
-            <label for="quizAddress">Business Address <span aria-hidden="true">*</span></label>
-            <input type="text" id="quizAddress" name="address" autocomplete="street-address" required>
-            <span class="form-error" data-quiz-error="address" role="alert"></span>
-          </div>
-
-          <div class="form-row">
             <label for="quizWebsite">Website (optional)</label>
             <input type="url" id="quizWebsite" name="website" autocomplete="url" placeholder="https://">
           </div>
@@ -277,8 +270,13 @@
             <input type="tel" id="quizPhone" name="phone" autocomplete="tel">
           </div>
 
+          <div class="form-row">
+            <label for="quizNotes">Tell us a little about what you need help with (optional)</label>
+            <textarea id="quizNotes" name="notes" rows="3"></textarea>
+          </div>
+
           <div class="quiz-form-actions">
-            <button type="submit" class="btn btn-primary" data-quiz-submit>Get My Free Consultation</button>
+            <button type="submit" class="btn btn-primary" data-quiz-submit>Request a Free Consultation</button>
           </div>
 
           <p class="form-status" data-quiz-status role="status" aria-live="polite"></p>
