@@ -562,6 +562,20 @@ and "Meet Our Team" remain deferred, same reasons as Round 7.
   footer) — no regressions, aside from updating the quiz test script's own
   fixture to stop filling the now-removed `#quizAddress` field.
 
+### Round 9 — reverted testimonials from masonry back to uniform cards
+
+Round 8 flagged a direct conflict: Mitzi's testimonial feedback (shorten the
+long first quote, or add "Read more") vs. the masonry/always-full-text layout
+built in Round 6 at explicit request. User resolved it: drop masonry, follow
+the client. Reverted `.testimonial-grid`/`.testimonial-card` to the exact
+pre-masonry design from Round 6.5 (equal-height grid, `line-clamp: 5` on the
+quote, a "See more"/"See less" toggle that only appears when a quote is
+actually being truncated — checked via `scrollHeight` vs `clientHeight`, not
+just "is this the long one," so it stays correct if any quote's length
+changes later) rather than reinventing it. Still doesn't touch the actual
+quoted text — the toggle satisfies her "Read more option" suggestion without
+editing a client's words.
+
 ## Known platform quirks (don't re-debug these, just work around them)
 
 - **This Vercel MCP integration cannot create Production deployments via API** for

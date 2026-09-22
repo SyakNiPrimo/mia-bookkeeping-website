@@ -16,6 +16,38 @@ if (navToggle && primaryNav) {
   });
 }
 
+// Testimonial "See more" toggle — the button only shows up if a quote is
+// actually being truncated, so short testimonials never get a dead button.
+const testimonialCards = document.querySelectorAll('.testimonial-card');
+
+if (testimonialCards.length) {
+  function refreshTestimonialToggles() {
+    testimonialCards.forEach((card) => {
+      const quote = card.querySelector('.testimonial-quote');
+      const toggle = card.querySelector('[data-testimonial-toggle]');
+      if (!quote || !toggle || quote.classList.contains('is-expanded')) return;
+      toggle.classList.toggle('is-hidden', quote.scrollHeight <= quote.clientHeight + 1);
+    });
+  }
+
+  testimonialCards.forEach((card) => {
+    const quote = card.querySelector('.testimonial-quote');
+    const toggle = card.querySelector('[data-testimonial-toggle]');
+    if (!quote || !toggle) return;
+
+    toggle.addEventListener('click', () => {
+      const expanded = quote.classList.toggle('is-expanded');
+      toggle.textContent = expanded ? 'See less' : 'See more';
+    });
+  });
+
+  refreshTestimonialToggles();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(refreshTestimonialToggles);
+  }
+  window.addEventListener('resize', refreshTestimonialToggles);
+}
+
 // Simple contact form: Name, Email, Message only
 // (guarded — not every page has this form)
 const contactForm = document.getElementById('contactForm');
