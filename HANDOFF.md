@@ -576,6 +576,63 @@ changes later) rather than reinventing it. Still doesn't touch the actual
 quoted text — the toggle satisfies her "Read more option" suggestion without
 editing a client's words.
 
+### Round 10 — email delivery verified live + full QA pass caught 4 missed items
+
+**Email delivery**: SMTP env vars were added to Vercel (CONTACT_FORM_TO_EMAIL,
+SMTP_HOST/PORT/SECURE/USER/PASS — Gmail App Password for
+mitzi@miabookkeeping.com) and redeployed. Verified with a direct API probe
+(200 `{"ok":true}`, no longer the "Email delivery is not configured" 500) and
+then a full real submission through both live forms via Playwright (no
+mocking) — contact form showed its success message, quiz reached the
+confirmation step. Two clearly-labeled test emails ("TEST - ... Delivery
+Check") were sent to her real inbox for her to confirm receipt.
+
+**Full QA pass** (requested before reporting site status back to the client):
+ran an automated check across all 8 pages on the live production site —
+HTTP status, console/page errors, broken images, internal link integrity,
+title uniqueness, CTA wording consistency, full quiz flow (option selection,
+Back-preserves-state, field set, button text), contact form field/label/
+validation set, and a dedicated mobile pass (390px) of every page plus the
+mobile nav flyout, quiz, testimonials, trust band, and industries band.
+Zero technical issues found.
+
+However, cross-referencing the *full* 30-point original feedback (not just
+her condensed HIGH/MEDIUM/LOWER priority list, which only explicitly
+enumerates 16 items and doesn't 1:1 cover every original note) surfaced 4
+concrete items from her original notes that fell through the cracks across
+Rounds 7–9 and were fixed now:
+
+- **Services page H1** — "Support for wherever your business operates."
+  (the exact repetitive "wherever" phrasing she flagged elsewhere) was never
+  changed. Now "Bookkeeping Support Built Around Your Business" (her own
+  suggested alternative, verbatim).
+- **"How We Work Remotely" → "How We Work With You"** — her note #15 asked
+  for this heading rename specifically; never done.
+- **Security language** — her note #16 asked to stop listing specific
+  software names (Google Drive, Dropbox, LastPass/1Password) and simplify;
+  the old wording was still live. Replaced with her suggested sentence
+  almost verbatim.
+- **"Monthly Financial Reporting" visibility** — her note #6 said this was
+  "mentioned in the copy" but "deserves more visibility"; it was only ever a
+  buried bullet inside Full-Cycle Bookkeeping's detail-page list, never its
+  own callout. Added as a 4th card in the Services page's "How We Work With
+  You" grid (`.remote-grid` already responsive via `auto-fit`, no CSS
+  changes needed), using her supplied heading and body copy verbatim.
+
+Verified all 4 with Playwright (new H1 text, renamed heading, card titles
+including the new 4th card, security copy confirmed to no longer match
+`/Google Drive|Dropbox|LastPass|1Password/`), screenshot of the 4-card grid
+fitting cleanly in one row, and re-ran the full quiz/contact regression
+suite — no regressions.
+
+Worth noting for future feedback passes on this project: Mitzi's own
+priority-ordered list (HIGH 1–7, MEDIUM 8–12, LOWER 13–16) is a *condensed
+regrouping* of her original 30 numbered notes, not a renumbering of all of
+them — several original notes (like #6, #15, #16, #23 above) don't map
+cleanly onto an item in that list. When working through her feedback in
+priority order, cross-check against the full original notes too, not just
+the condensed list, or items like these will get missed.
+
 ## Known platform quirks (don't re-debug these, just work around them)
 
 - **This Vercel MCP integration cannot create Production deployments via API** for
