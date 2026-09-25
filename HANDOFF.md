@@ -633,6 +633,33 @@ cleanly onto an item in that list. When working through her feedback in
 priority order, cross-check against the full original notes too, not just
 the condensed list, or items like these will get missed.
 
+### Round 11 — new hero background photo + Meet the Team page
+
+- **Hero background photo**: `index.html`'s hero section now has a real photo
+  background (`assets/img/hero-bg2.jpeg` — swapped in after an initial pass
+  with `hero-bg.jpg`, both client-supplied) instead of the flat gradient. A
+  navy gradient overlay (`.hero` in `css/styles.css`, using the brand's own
+  dark tones) sits over the photo so text stays readable; hero H1/copy
+  switched to white/near-white and `.hero .btn-outline` got a white-on-dark
+  override (the default outline button is dark-navy text on a light border —
+  invisible against the new dark photo without this). Confirmed via
+  Playwright screenshots at desktop and 390px mobile widths. Note:
+  `hero-bg2.jpeg` is only 736×414px, so it's visibly softer than a full-res
+  photo would be on very large/high-DPI screens — not pixelated, just not
+  perfectly sharp. `hero-bg.jpg` (2600×1887, the original higher-res upload)
+  is still in `assets/img/` unused, in case it's ever swapped back in.
+- **New `/team` page** (`team.html`): the "Meet Our Team" section that's been
+  blocked since Round 7 pending team member names/roles. Confirmed with the
+  client that, for now, it's just Mitzi — built as a `.team-grid`/`.team-card`
+  pattern (auto-fit grid, one card today) specifically so more people can be
+  dropped in later without a redesign, reusing the existing `.about-photo`
+  circular-headshot component. Linked from the primary nav and footer
+  "Company" column on all 9 pages (`index.html`, `about.html`, `services.html`,
+  `contact.html`, `team.html`, and the 4 `services/*.html` detail pages).
+  Verified across all pages with Playwright: HTTP 200, zero broken images,
+  zero console errors, Team nav link present, mobile nav flyout still fits
+  with the extra item, quiz still opens fine from the new page.
+
 ## Known platform quirks (don't re-debug these, just work around them)
 
 - **This Vercel MCP integration cannot create Production deployments via API** for
