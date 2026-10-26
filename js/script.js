@@ -135,7 +135,7 @@ if (contactForm) {
         throw new Error('Request failed');
       }
 
-      formStatus.textContent = "Thanks for reaching out — we'll be in touch soon.";
+      formStatus.textContent = "Thanks for reaching out. We'll be in touch soon.";
       formStatus.classList.add('success');
       contactForm.reset();
     } catch (err) {
