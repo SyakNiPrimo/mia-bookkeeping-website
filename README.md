@@ -43,7 +43,7 @@ There are two separate lead paths:
   Us" button. Layout modeled on simplybookkeepingboise.com/contact-us. Fields:
   Business Name, First/Last Name, Email, Phone (optional), Website (optional),
   Services Needed checkboxes (Bookkeeping, Clean Up & Catch Up, Payroll,
-  Consulting; at least one required) and "What do you need help with?". No
+  Consulting; at least one required), Subject and Message (both optional). No
   business address is collected, dropped per client feedback as too much
   friction for a first touch. Validates client-side and shows success/error
   states.

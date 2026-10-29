@@ -27,11 +27,6 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (formType === 'contact' && !body.message) {
-    res.status(400).json({ error: 'Message is required.' });
-    return;
-  }
-
   if (!toEmail) {
     console.error('CONTACT_FORM_TO_EMAIL is not configured.');
     res.status(500).json({ error: 'Email delivery is not configured.' });
@@ -107,21 +102,24 @@ function buildContactEmail(body) {
     ['Website', body.website],
     ['Phone', body.phone],
     ['Services Needed', services],
+    ['Subject', body.subject],
   ];
 
-  const subject = `New quote request from ${body.name}`;
+  const subject = body.subject
+    ? `New quote request from ${body.name}: ${body.subject}`
+    : `New quote request from ${body.name}`;
   const text = [
     ...rows.map(([label, value]) => `${label}: ${value || '—'}`),
     '',
-    'What they need help with:',
-    body.message,
+    'Message:',
+    body.message || '—',
   ].join('\n');
 
   const html = `
-    <h2 style="font-family:sans-serif;">New contact form message</h2>
+    <h2 style="font-family:sans-serif;">New quote request</h2>
     ${renderTable(rows)}
-    <p style="font-family:sans-serif;"><strong>What they need help with:</strong></p>
-    <p style="font-family:sans-serif;">${escapeHtml(body.message).replace(/\n/g, '<br>')}</p>
+    <p style="font-family:sans-serif;"><strong>Message:</strong></p>
+    <p style="font-family:sans-serif;">${escapeHtml(body.message || '—').replace(/\n/g, '<br>')}</p>
   `;
 
   return { subject, text, html };

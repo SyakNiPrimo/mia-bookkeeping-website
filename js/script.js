@@ -58,11 +58,11 @@ if (contactForm) {
   const businessNameInput = document.getElementById('contactBusinessName');
   const websiteInput = document.getElementById('contactWebsite');
   const phoneInput = document.getElementById('contactPhone');
+  const subjectInput = document.getElementById('contactSubject');
   const messageInput = document.getElementById('contactMessage');
   const nameError = document.getElementById('contactNameError');
   const emailError = document.getElementById('contactEmailError');
   const businessNameError = document.getElementById('contactBusinessNameError');
-  const messageError = document.getElementById('contactMessageError');
   const servicesError = document.getElementById('contactServicesError');
   const serviceBoxes = contactForm.querySelectorAll('input[name="services"]');
   const submitBtn = document.getElementById('contactSubmitBtn');
@@ -104,17 +104,10 @@ if (contactForm) {
       businessNameError.textContent = '';
     }
 
-    if (!messageInput.value.trim()) {
-      messageError.textContent = 'Please tell us what you need help with.';
-      valid = false;
-    } else {
-      messageError.textContent = '';
-    }
-
     return valid;
   }
 
-  [firstNameInput, lastNameInput, emailInput, businessNameInput, messageInput].forEach((input) => {
+  [firstNameInput, lastNameInput, emailInput, businessNameInput].forEach((input) => {
     input.addEventListener('blur', validateContactForm);
   });
 
@@ -146,6 +139,7 @@ if (contactForm) {
           businessName: businessNameInput.value.trim(),
           website: websiteInput.value.trim(),
           phone: phoneInput.value.trim(),
+          subject: subjectInput.value.trim(),
           message: messageInput.value.trim(),
         }),
       });

@@ -113,9 +113,11 @@
         </fieldset>
 
         <div class="form-row">
-          <label for="contactMessage">What do you need help with? <span class="req" aria-hidden="true">*</span></label>
-          <textarea id="contactMessage" name="message" rows="5" placeholder="Message" required></textarea>
-          <span class="form-error" id="contactMessageError" role="alert"></span>
+          <input type="text" id="contactSubject" name="subject" placeholder="Subject" aria-label="Subject">
+        </div>
+
+        <div class="form-row">
+          <textarea id="contactMessage" name="message" rows="5" placeholder="Message" aria-label="Message"></textarea>
         </div>
 
         <div class="contact-card-actions">
