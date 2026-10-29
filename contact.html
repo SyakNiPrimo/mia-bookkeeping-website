@@ -34,75 +34,93 @@
       <a href="/services">Services</a>
       <a href="/about">About</a>
       <a href="/team">Team</a>
-      <button type="button" class="nav-cta" data-open-quiz>Request a Quote</button>
+      <a href="/contact" class="nav-cta">Request a Quote</a>
     </nav>
   </div>
 </header>
 
 <main id="main">
 
-  <!-- ============ PAGE HERO ============ -->
-  <section class="page-hero">
+  <!-- ============ CONTACT BANNER ============ -->
+  <section class="contact-banner">
     <div class="container">
-      <p class="eyebrow">Contact</p>
-      <h1>Let's talk books.</h1>
-      <p class="hero-copy">
-        Serving businesses across the United States. Send a message and we'll get back to you
-        shortly.
-      </p>
+      <h1>Contact Us</h1>
     </div>
   </section>
 
   <!-- ============ CONTACT ============ -->
-  <section id="contact" class="contact">
-    <div class="container contact-inner">
-      <div class="contact-info">
-        <h2 class="section-title">Get in Touch</h2>
-
-        <ul class="contact-details">
-          <li><strong>Email:</strong> <a href="mailto:mitzi@miabookkeeping.com">mitzi@miabookkeeping.com</a></li>
-          <li><strong>Phone / WhatsApp:</strong> <a href="tel:+639064769031">+63 906 476 9031</a></li>
-          <li><strong>Availability:</strong> Available during U.S. business hours, with scheduling aligned to your time zone. Typical response within one business day</li>
-          <li><strong>Serving:</strong> Based in the Philippines, serving businesses across the United States remotely</li>
-        </ul>
+  <section id="contact" class="contact-split">
+    <div class="container contact-split-inner">
+      <div class="contact-panel">
+        <h2>MIA Bookkeeping and Co.</h2>
+        <p>Based in the Philippines, serving businesses across the United States remotely.</p>
+        <p>
+          Email: <a href="mailto:mitzi@miabookkeeping.com">mitzi@miabookkeeping.com</a><br>
+          Phone / WhatsApp: <a href="tel:+639523968084">+63 952 396 8084</a>
+        </p>
+        <h3>Availability</h3>
+        <p>
+          Available during U.S. business hours<br>
+          Scheduling aligned to your time zone<br>
+          Typical response within one business day
+        </p>
+        <a href="mailto:mitzi@miabookkeeping.com" class="btn contact-panel-btn">Email Us</a>
       </div>
 
-      <form class="contact-form" id="contactForm" novalidate>
-        <div class="form-row">
-          <label for="contactName">Name <span aria-hidden="true">*</span></label>
-          <input type="text" id="contactName" name="name" autocomplete="name" required>
-          <span class="form-error" id="contactNameError" role="alert"></span>
-        </div>
+      <form class="contact-card" id="contactForm" novalidate>
+        <img src="assets/img/logo-mark-dark.png" alt="" class="contact-card-logo">
+        <h2>Request a Quote</h2>
 
         <div class="form-row">
-          <label for="contactEmail">Email <span aria-hidden="true">*</span></label>
-          <input type="email" id="contactEmail" name="email" autocomplete="email" required>
-          <span class="form-error" id="contactEmailError" role="alert"></span>
-        </div>
-
-        <div class="form-row">
-          <label for="contactBusinessName">Business Name <span aria-hidden="true">*</span></label>
-          <input type="text" id="contactBusinessName" name="businessName" autocomplete="organization" required>
+          <label for="contactBusinessName">Business Name <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="contactBusinessName" name="businessName" autocomplete="organization" placeholder="Business Name" required>
           <span class="form-error" id="contactBusinessNameError" role="alert"></span>
         </div>
 
         <div class="form-row">
-          <label for="contactWebsite">Website (optional)</label>
-          <input type="url" id="contactWebsite" name="website" autocomplete="url" placeholder="https://">
+          <label for="contactFirstName">Full Name <span class="req" aria-hidden="true">*</span></label>
+          <div class="form-pair">
+            <input type="text" id="contactFirstName" name="firstName" autocomplete="given-name" placeholder="First Name" aria-label="First Name" required>
+            <input type="text" id="contactLastName" name="lastName" autocomplete="family-name" placeholder="Last Name" aria-label="Last Name" required>
+          </div>
+          <span class="form-error" id="contactNameError" role="alert"></span>
         </div>
 
         <div class="form-row">
-          <label for="contactPhone">Phone (optional)</label>
-          <input type="tel" id="contactPhone" name="phone" autocomplete="tel">
+          <label for="contactEmail">Email Address <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="contactEmail" name="email" autocomplete="email" placeholder="Email" required>
+          <span class="form-error" id="contactEmailError" role="alert"></span>
         </div>
 
         <div class="form-row">
-          <label for="contactMessage">What do you need help with? <span aria-hidden="true">*</span></label>
-          <textarea id="contactMessage" name="message" rows="5" required></textarea>
+          <label for="contactPhone">Phone Number (optional)</label>
+          <input type="tel" id="contactPhone" name="phone" autocomplete="tel" placeholder="Phone Number">
+        </div>
+
+        <div class="form-row">
+          <label for="contactWebsite">Your Business Website (optional)</label>
+          <input type="url" id="contactWebsite" name="website" autocomplete="url" placeholder="Website Address">
+        </div>
+
+        <fieldset class="form-row form-checks">
+          <legend>Services Needed <span class="req" aria-hidden="true">*</span></legend>
+          <label><input type="checkbox" name="services" value="Bookkeeping"> Bookkeeping</label>
+          <label><input type="checkbox" name="services" value="Clean Up &amp; Catch Up"> Clean Up &amp; Catch Up</label>
+          <label><input type="checkbox" name="services" value="Payroll"> Payroll</label>
+          <label><input type="checkbox" name="services" value="Consulting"> Consulting</label>
+          <span class="form-hint">Select all that apply</span>
+          <span class="form-error" id="contactServicesError" role="alert"></span>
+        </fieldset>
+
+        <div class="form-row">
+          <label for="contactMessage">What do you need help with? <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="contactMessage" name="message" rows="5" placeholder="Message" required></textarea>
           <span class="form-error" id="contactMessageError" role="alert"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="contactSubmitBtn">Send Message</button>
+        <div class="contact-card-actions">
+          <button type="submit" class="btn btn-primary" id="contactSubmitBtn">Submit</button>
+        </div>
 
         <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </form>
@@ -146,7 +164,7 @@
       <div class="footer-col">
         <h4>Get in Touch</h4>
         <p><a href="mailto:mitzi@miabookkeeping.com">mitzi@miabookkeeping.com</a></p>
-        <p><a href="tel:+639064769031">+63 906 476 9031</a></p>
+        <p><a href="tel:+639523968084">+63 952 396 8084</a></p>
         <p>Philippines-based, serving U.S. businesses</p>
       </div>
     </div>

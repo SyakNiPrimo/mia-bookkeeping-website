@@ -34,20 +34,24 @@ logo artwork. If a different final lockup or palette is provided later,
 swap the images in `assets/img/` and update the `--color-*` tokens at the
 top of `css/styles.css`.
 
-## Lead capture: contact form + "Book a Free Consultation" quiz
+## Lead capture: quote request form + consultation quiz
 
-There are two separate, intentionally different-weight lead paths:
+There are two separate lead paths:
 
-- **Contact form** (`contact.html`, reached via the footer's "Contact" link) — a
-  low-key form (Name, Email, Business Name, Website, Phone, "What do you need
-  help with?") for people who just want to send a direct message. No business
-  address is collected here — dropped per client feedback as too much friction
-  for a first touch. Validates client-side and shows success/error states.
-- **"Book a Free Consultation" quiz** — a 5-step modal (progress bar, one
+- **Quote request form** (`contact.html`), reached from every "Request a Quote"
+  button sitewide (header nav, hero, closing CTAs) and the homepage's "Chat With
+  Us" button. Layout modeled on simplybookkeepingboise.com/contact-us. Fields:
+  Business Name, First/Last Name, Email, Phone (optional), Website (optional),
+  Services Needed checkboxes (Bookkeeping, Clean Up & Catch Up, Payroll,
+  Consulting; at least one required) and "What do you need help with?". No
+  business address is collected, dropped per client feedback as too much
+  friction for a first touch. Validates client-side and shows success/error
+  states.
+- **Consultation quiz**: a 5-step modal (progress bar, one
   question per screen, big tappable option cards, Back navigation, final step
-  collects contact info + an optional free-text note) launched from every
-  "Book a Free Consultation" button sitewide (header nav, hero, closing CTAs,
-  service-detail CTAs). Its markup/JS/CSS live in `js/script.js`
+  collects contact info + an optional free-text note), now only launched from
+  the homepage "Get Your Books Tax-Ready" button and the four service-detail
+  "Let's Discuss…" CTAs. Its markup/JS/CSS live in `js/script.js`
   (`data-quiz-*` attributes) and `css/styles.css` (`.quiz-*` classes); the
   modal HTML itself is duplicated at the end of every page's `<body>`, same
   pattern as the shared header/footer.

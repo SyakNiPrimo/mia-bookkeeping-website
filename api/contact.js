@@ -99,15 +99,17 @@ function renderTable(rows) {
 }
 
 function buildContactEmail(body) {
+  const services = Array.isArray(body.services) ? body.services.join(', ') : body.services;
   const rows = [
     ['Name', body.name],
     ['Email', body.email],
     ['Business Name', body.businessName],
     ['Website', body.website],
     ['Phone', body.phone],
+    ['Services Needed', services],
   ];
 
-  const subject = `New contact form message from ${body.name}`;
+  const subject = `New quote request from ${body.name}`;
   const text = [
     ...rows.map(([label, value]) => `${label}: ${value || '—'}`),
     '',

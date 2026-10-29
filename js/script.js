@@ -48,12 +48,12 @@ if (testimonialCards.length) {
   window.addEventListener('resize', refreshTestimonialToggles);
 }
 
-// Simple contact form: Name, Email, Message only
-// (guarded — not every page has this form)
+// Contact / quote request form (guarded — not every page has this form)
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-  const nameInput = document.getElementById('contactName');
+  const firstNameInput = document.getElementById('contactFirstName');
+  const lastNameInput = document.getElementById('contactLastName');
   const emailInput = document.getElementById('contactEmail');
   const businessNameInput = document.getElementById('contactBusinessName');
   const websiteInput = document.getElementById('contactWebsite');
@@ -63,19 +63,31 @@ if (contactForm) {
   const emailError = document.getElementById('contactEmailError');
   const businessNameError = document.getElementById('contactBusinessNameError');
   const messageError = document.getElementById('contactMessageError');
+  const servicesError = document.getElementById('contactServicesError');
+  const serviceBoxes = contactForm.querySelectorAll('input[name="services"]');
   const submitBtn = document.getElementById('contactSubmitBtn');
   const formStatus = document.getElementById('formStatus');
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  const selectedServices = () =>
+    Array.from(serviceBoxes).filter((box) => box.checked).map((box) => box.value);
+
   function validateContactForm() {
     let valid = true;
 
-    if (!nameInput.value.trim()) {
-      nameError.textContent = 'Please enter your name.';
+    if (!firstNameInput.value.trim() || !lastNameInput.value.trim()) {
+      nameError.textContent = 'Please enter your first and last name.';
       valid = false;
     } else {
       nameError.textContent = '';
+    }
+
+    if (selectedServices().length === 0) {
+      servicesError.textContent = 'Please select at least one service.';
+      valid = false;
+    } else {
+      servicesError.textContent = '';
     }
 
     if (!emailInput.value.trim() || !emailPattern.test(emailInput.value.trim())) {
@@ -102,8 +114,14 @@ if (contactForm) {
     return valid;
   }
 
-  [nameInput, emailInput, businessNameInput, messageInput].forEach((input) => {
+  [firstNameInput, lastNameInput, emailInput, businessNameInput, messageInput].forEach((input) => {
     input.addEventListener('blur', validateContactForm);
+  });
+
+  serviceBoxes.forEach((box) => {
+    box.addEventListener('change', () => {
+      if (selectedServices().length) servicesError.textContent = '';
+    });
   });
 
   contactForm.addEventListener('submit', async (event) => {
@@ -122,8 +140,9 @@ if (contactForm) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           formType: 'contact',
-          name: nameInput.value.trim(),
+          name: `${firstNameInput.value.trim()} ${lastNameInput.value.trim()}`,
           email: emailInput.value.trim(),
+          services: selectedServices(),
           businessName: businessNameInput.value.trim(),
           website: websiteInput.value.trim(),
           phone: phoneInput.value.trim(),
@@ -144,7 +163,7 @@ if (contactForm) {
       formStatus.classList.add('error');
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Send Message';
+      submitBtn.textContent = 'Submit';
     }
   });
 }
