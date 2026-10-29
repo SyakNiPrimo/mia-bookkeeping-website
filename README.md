@@ -39,8 +39,8 @@ top of `css/styles.css`.
 There are two separate lead paths:
 
 - **Quote request form** (`contact.html`), reached from every "Request a Quote"
-  button sitewide (header nav, hero, closing CTAs) and the homepage's "Chat With
-  Us" button. Layout modeled on simplybookkeepingboise.com/contact-us. Fields:
+  button sitewide (header nav, hero, closing CTAs). The homepage's "Chat With
+  Us" button and every phone-number link open WhatsApp (wa.me). Layout modeled on simplybookkeepingboise.com/contact-us. Fields:
   Business Name, First/Last Name, Email, Phone (optional), Website (optional),
   Services Needed checkboxes (Bookkeeping, Clean Up & Catch Up, Payroll,
   Consulting; at least one required), Subject and Message (both optional). No
