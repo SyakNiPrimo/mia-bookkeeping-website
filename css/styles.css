@@ -1071,6 +1071,59 @@ textarea:focus-visible {
   width: 100%;
 }
 
+.form-address {
+  border: 0;
+  padding: 0;
+  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-address legend {
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.sub-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-grid-2 > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.form-address input,
+.form-address select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--color-ink);
+  width: 100%;
+  min-width: 0;
+}
+
+.form-address select:invalid {
+  color: #757575;
+}
+
 .form-checks {
   border: 0;
   padding: 0;

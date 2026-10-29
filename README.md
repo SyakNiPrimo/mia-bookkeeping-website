@@ -43,10 +43,11 @@ There are two separate lead paths:
   Us" button and every phone-number link open WhatsApp (wa.me). Layout modeled on simplybookkeepingboise.com/contact-us. Fields:
   Business Name, First/Last Name, Email, Phone (optional), Website (optional),
   Services Needed checkboxes (Bookkeeping, Clean Up & Catch Up, Payroll,
-  Consulting; at least one required), Subject and Message (both optional). No
-  business address is collected, dropped per client feedback as too much
-  friction for a first touch. Validates client-side and shows success/error
-  states.
+  Consulting; at least one required), a required Business Address (US or
+  Canada only: country picker drives the State vs Province/Territory list and
+  ZIP vs postal code validation, re-checked server-side in `api/contact.js`),
+  and Subject and Message (both optional). Validates client-side and shows
+  success/error states.
 - **Consultation quiz**: a 5-step modal (progress bar, one
   question per screen, big tappable option cards, Back navigation, final step
   collects contact info + an optional free-text note), now only launched from

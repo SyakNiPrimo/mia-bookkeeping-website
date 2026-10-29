@@ -27,6 +27,14 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  if (formType === 'contact') {
+    const addressError = validateAddress(body);
+    if (addressError) {
+      res.status(400).json({ error: addressError });
+      return;
+    }
+  }
+
   if (!toEmail) {
     console.error('CONTACT_FORM_TO_EMAIL is not configured.');
     res.status(500).json({ error: 'Email delivery is not configured.' });
@@ -75,6 +83,31 @@ module.exports = async function handler(req, res) {
   }
 };
 
+const POSTAL_PATTERNS = {
+  'United States': /^\d{5}(-\d{4})?$/,
+  Canada: /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z] ?\d[ABCEGHJ-NPRSTV-Z]\d$/i,
+};
+
+function validateAddress(body) {
+  const pattern = POSTAL_PATTERNS[body.country];
+  if (!pattern) return 'Country must be United States or Canada.';
+  if (!body.street || !body.city || !body.region) {
+    return 'Business street address, city, and state/province are required.';
+  }
+  if (!pattern.test(String(body.postalCode || '').trim())) {
+    return 'A valid ZIP or postal code is required.';
+  }
+  return '';
+}
+
+function formatAddress(body) {
+  return [
+    [body.street, body.street2].filter(Boolean).join(', '),
+    `${body.city}, ${body.region} ${body.postalCode}`,
+    body.country,
+  ].join('\n');
+}
+
 function escapeHtml(value) {
   return String(value || '')
     .replace(/&/g, '&amp;')
@@ -88,7 +121,7 @@ function renderTable(rows) {
       ([label, value]) =>
         `<tr><td style="border:1px solid #d8dadd;background:#f1f3f4;"><strong>${escapeHtml(
           label
-        )}</strong></td><td style="border:1px solid #d8dadd;">${escapeHtml(value) || '—'}</td></tr>`
+        )}</strong></td><td style="border:1px solid #d8dadd;">${escapeHtml(value).replace(/\n/g, '<br>') || '—'}</td></tr>`
     )
     .join('')}</table>`;
 }
@@ -101,6 +134,7 @@ function buildContactEmail(body) {
     ['Business Name', body.businessName],
     ['Website', body.website],
     ['Phone', body.phone],
+    ['Business Address', formatAddress(body)],
     ['Services Needed', services],
     ['Subject', body.subject],
   ];

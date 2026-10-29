@@ -68,13 +68,87 @@ if (contactForm) {
   const submitBtn = document.getElementById('contactSubmitBtn');
   const formStatus = document.getElementById('formStatus');
 
+  const countrySelect = document.getElementById('contactCountry');
+  const streetInput = document.getElementById('contactStreet');
+  const street2Input = document.getElementById('contactStreet2');
+  const cityInput = document.getElementById('contactCity');
+  const regionSelect = document.getElementById('contactRegion');
+  const postalInput = document.getElementById('contactPostal');
+  const addressError = document.getElementById('contactAddressError');
+  const regionLabel = contactForm.querySelector('[data-region-label]');
+  const postalLabel = contactForm.querySelector('[data-postal-label]');
+
+  const ADDRESS_FORMATS = {
+    'United States': {
+      regionName: 'State',
+      postalName: 'ZIP Code',
+      postalPattern: /^\d{5}(-\d{4})?$/,
+      postalExample: '83702',
+      inputMode: 'numeric',
+      regions: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
+        'Connecticut', 'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii',
+        'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
+        'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri',
+        'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
+        'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
+        'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee',
+        'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin',
+        'Wyoming'],
+    },
+    Canada: {
+      regionName: 'Province / Territory',
+      postalName: 'Postal Code',
+      postalPattern: /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z] ?\d[ABCEGHJ-NPRSTV-Z]\d$/i,
+      postalExample: 'K1A 0B1',
+      inputMode: 'text',
+      regions: ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+        'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut',
+        'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon'],
+    },
+  };
+
+  const addressFormat = () => ADDRESS_FORMATS[countrySelect.value];
+
+  function applyAddressFormat() {
+    const fmt = addressFormat();
+    regionLabel.textContent = fmt.regionName;
+    postalLabel.textContent = fmt.postalName;
+    postalInput.placeholder = fmt.postalName;
+    postalInput.inputMode = fmt.inputMode;
+    regionSelect.replaceChildren(
+      new Option(`Select ${fmt.regionName}`, ''),
+      ...fmt.regions.map((r) => new Option(r, r))
+    );
+  }
+
+  applyAddressFormat();
+  countrySelect.addEventListener('change', () => {
+    applyAddressFormat();
+    postalInput.value = '';
+  });
+
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const selectedServices = () =>
     Array.from(serviceBoxes).filter((box) => box.checked).map((box) => box.value);
 
+  function validateAddress() {
+    const fmt = addressFormat();
+    if (!streetInput.value.trim() || !cityInput.value.trim() || !regionSelect.value) {
+      return 'Please complete your business address.';
+    }
+    if (!fmt.postalPattern.test(postalInput.value.trim())) {
+      return `Enter a valid ${fmt.postalName} (e.g. ${fmt.postalExample}).`;
+    }
+    return '';
+  }
+
   function validateContactForm() {
     let valid = true;
+
+    const addressMsg = validateAddress();
+    addressError.textContent = addressMsg;
+    if (addressMsg) valid = false;
 
     if (!firstNameInput.value.trim() || !lastNameInput.value.trim()) {
       nameError.textContent = 'Please enter your first and last name.';
@@ -111,6 +185,14 @@ if (contactForm) {
     input.addEventListener('blur', validateContactForm);
   });
 
+  // Clear on 'input' (while typing), not on blur: clearing on blur fires on
+  // mousedown of the Submit button, shifting it out from under the click.
+  [streetInput, cityInput, regionSelect, postalInput].forEach((field) => {
+    field.addEventListener('input', () => {
+      if (!validateAddress()) addressError.textContent = '';
+    });
+  });
+
   serviceBoxes.forEach((box) => {
     box.addEventListener('change', () => {
       if (selectedServices().length) servicesError.textContent = '';
@@ -139,6 +221,14 @@ if (contactForm) {
           businessName: businessNameInput.value.trim(),
           website: websiteInput.value.trim(),
           phone: phoneInput.value.trim(),
+          street: streetInput.value.trim(),
+          street2: street2Input.value.trim(),
+          city: cityInput.value.trim(),
+          region: regionSelect.value,
+          postalCode: countrySelect.value === 'Canada'
+            ? postalInput.value.replace(/\s/g, '').toUpperCase().replace(/^(.{3})/, '$1 ')
+            : postalInput.value.trim(),
+          country: countrySelect.value,
           subject: subjectInput.value.trim(),
           message: messageInput.value.trim(),
         }),
@@ -151,6 +241,7 @@ if (contactForm) {
       formStatus.textContent = "Thanks for reaching out. We'll be in touch soon.";
       formStatus.classList.add('success');
       contactForm.reset();
+      applyAddressFormat();
     } catch (err) {
       formStatus.textContent =
         "Something went wrong sending your message. Please email us directly instead.";
